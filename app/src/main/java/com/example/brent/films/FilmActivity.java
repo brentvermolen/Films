@@ -287,7 +287,7 @@ public class FilmActivity extends AppCompatActivity {
 
         MenuItem item = menu.findItem(R.id.action_favorite);
 
-        if (dao.getById(film.getId()) != null){
+        if (dao.getById(film.getId()).isFavorite()){
             item.setIcon(R.drawable.ic_favorite);
         }else {
             item.setIcon(R.drawable.ic_not_favorite);
@@ -303,12 +303,12 @@ public class FilmActivity extends AppCompatActivity {
         switch (id){
             case R.id.action_favorite:
                 Film f = dao.getById(film.getId());
-                if (f == null){
+                if (!f.isFavorite()){
                     item.setIcon(R.drawable.ic_favorite);
-                    dao.insert(film);
+                    dao.toggleFavorits(f.getId(), 1);
                 }else {
                     item.setIcon(R.drawable.ic_not_favorite);
-                    dao.deleteById(film.getId());
+                    dao.toggleFavorits(f.getId(), 0);
                 }
 
                 dao = FilmsDb.getDatabase(FilmActivity.this).filmsDAO();

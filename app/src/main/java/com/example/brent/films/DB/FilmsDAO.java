@@ -28,4 +28,7 @@ public interface FilmsDAO {
 
     @Query("Select * From Film Where isFavorite=1")
     List<Film> getFavorits();
+
+    @Query("Update Film Set isFavorite = (:isFavorite) Where Id = (:id)")
+    void toggleFavorits(int id, int isFavorite);
 }

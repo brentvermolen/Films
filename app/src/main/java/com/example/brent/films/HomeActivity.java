@@ -240,4 +240,13 @@ public class HomeActivity extends AppCompatActivity {
                 setGenreBar();
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!btnFavorieten.isEnabled()){
+            showFilms(filmsDAO.getFavorits());
+        }
+    }
 }
