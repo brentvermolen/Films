@@ -247,4 +247,39 @@ public class DbRemoteMethods {
         Log.e("DB Conn", z);
         return data;
     }
+
+    public static void InsertTag(String naam) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Select Max(ID) From Tags";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+                rs.first();
+                int max = rs.getInt(1);
+
+                query = "SET IDENTITY_INSERT Tags ON; Insert Into Tags(ID, Naam) Values (" + ++max + ", '" + naam + "'); SET IDENTITY_INSERT Tags OFF;";
+                stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.executeQuery(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
 }
