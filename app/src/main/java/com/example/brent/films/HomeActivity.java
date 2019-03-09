@@ -94,8 +94,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        setGenreBar();
-
         btnAlleFilms = (Button) findViewById(R.id.btnTagAlle);
         btnAlleFilms.setEnabled(false);
         btnAlleFilms.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +131,8 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         grdMovies = (GridView) findViewById(R.id.grdMovies);
-        showFilms(currentlyShown);
+
+        setGenreBar();
     }
 
     private void setGenreBar() {
@@ -184,6 +183,8 @@ public class HomeActivity extends AppCompatActivity {
 
             llGenres.addView(btnGenre);
         }
+
+        btnAlleFilms.performClick();
     }
 
     private void handleEvents() {
@@ -236,7 +237,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         switch (requestCode){
             case 1:
-                genresDAO = FilmsDb.getDatabase(this).genresDAO();
                 setGenreBar();
         }
     }

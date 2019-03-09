@@ -16,7 +16,7 @@ import com.example.brent.films.Model.Tag;
 
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class }, version = 6)
+@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class }, version = 7)
 public abstract class FilmsDb extends RoomDatabase {
     private static FilmsDb INSTANCE;
     private static final String DB_NAME = "Films.db";

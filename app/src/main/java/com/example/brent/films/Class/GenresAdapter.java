@@ -1,16 +1,21 @@
 package com.example.brent.films.Class;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.brent.films.DB.DbRemoteMethods;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.DB.GenresDAO;
 import com.example.brent.films.Model.Tag;
@@ -55,16 +60,14 @@ public class GenresAdapter extends BaseAdapter {
 
     private class ViewHolder {
         TextView lblGenre;
-        LinearLayout llEigenGenre;
-        ImageView btnEditGenre;
-        ImageView btnDeleteGenre;
+        ImageButton btnEditGenre;
+        ImageButton btnDeleteGenre;
 
-        LinearLayout llBestaandGenre;
         ToggleButton btnToggleZichtbaarheid;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
 
         this.onzichtbareTags = dao.getHiddenTags();
 
@@ -74,11 +77,87 @@ public class GenresAdapter extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.lblGenre = convertView.findViewById(R.id.lblGenre);
-            viewHolder.llEigenGenre = convertView.findViewById(R.id.llEigenGenre);
             viewHolder.btnEditGenre = convertView.findViewById(R.id.btnEditGenre);
             viewHolder.btnDeleteGenre = convertView.findViewById(R.id.btnDeleteGenre);
-            viewHolder.llBestaandGenre = convertView.findViewById(R.id.llBestaandGenre);
             viewHolder.btnToggleZichtbaarheid = convertView.findViewById(R.id.tglVisibility);
+
+            viewHolder.btnToggleZichtbaarheid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Tag t = (Tag)viewHolder.lblGenre.getTag();
+                    if (((ToggleButton)v).isChecked()){
+                        dao.updateVisibility(t.getId(), 0);
+                        //Toast.makeText(mContext, "Verwijderd", Toast.LENGTH_SHORT).show();
+                    }else{
+                        dao.updateVisibility(t.getId(), 1);
+                        //Toast.makeText(mContext, "Toegevoegd", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            viewHolder.btnEditGenre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final DialogTextInput dialogTextInput = new DialogTextInput(mContext, "Wijzig Genre", viewHolder.lblGenre.getText().toString());
+
+                    dialogTextInput.setPositiveButton("Wijzig", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final Tag tag = (Tag)viewHolder.lblGenre.getTag();
+                            tag.setNaam(dialogTextInput.txt.getText().toString());
+
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    DbRemoteMethods.UpdateTag(tag);
+
+                                    return null;
+                                }
+                            }.execute();
+
+                            viewHolder.lblGenre.setText(dialogTextInput.txt.getText().toString());
+                            DAC.Tags.remove(tag);
+                            DAC.Tags.add(tag);
+
+                            dao.update(tag.getId(), tag.getNaam());
+                        }
+                    });
+
+                    dialogTextInput.show();
+                }
+            });
+
+            viewHolder.btnDeleteGenre.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+                    builder.setMessage("Bent u zeker dat u dit genre wil verwijderen?");
+
+                    builder.setNegativeButton("Nee", null)
+                            .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final Tag tag = (Tag)viewHolder.lblGenre.getTag();
+
+                                    new AsyncTask<Void, Void, Void>(){
+                                        @Override
+                                        protected Void doInBackground(Void... voids) {
+                                            DbRemoteMethods.DeleteTag(tag);
+
+                                            return null;
+                                        }
+                                    }.execute();
+
+                                    tags.remove(tag);
+                                    notifyDataSetChanged();
+
+                                    DAC.Tags.remove(tag);
+                                    dao.deleteById(tag.getId());
+                                }
+                            }).show();
+                }
+            });
 
             convertView.setTag(viewHolder);
         } else {
@@ -86,37 +165,10 @@ public class GenresAdapter extends BaseAdapter {
         }
 
         viewHolder.lblGenre.setText(tags.get(position).getNaam());
-        if (tags.get(position).getId() >= 100){
-            viewHolder.llBestaandGenre.setVisibility(View.GONE);
-            viewHolder.llEigenGenre.setVisibility(View.VISIBLE);
-        }else{
-            viewHolder.llEigenGenre.setVisibility(View.GONE);
-            viewHolder.llBestaandGenre.setVisibility(View.VISIBLE);
+        viewHolder.lblGenre.setTag(tags.get(position));
 
-            boolean isZichtbaar = !onzichtbareTags.contains(tags.get(position));
-            viewHolder.btnToggleZichtbaarheid.setChecked(isZichtbaar);
-            viewHolder.btnToggleZichtbaarheid.setTag(isZichtbaar);
-        }
-
-        viewHolder.btnToggleZichtbaarheid.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tag t = tags.get(position);
-                if (((ToggleButton)v).isChecked()){
-                    //dao.deleteById(t.getId());
-                    //t.setHidden(false);
-                    //dao.insert(t);
-                    dao.updateVisibility(t.getId(), 0);
-                    Toast.makeText(mContext, "Verwijderd", Toast.LENGTH_SHORT).show();
-                }else{
-                    //dao.deleteById(t.getId());
-                    //t.setHidden(true);
-                    //dao.insert(t);
-                    dao.updateVisibility(t.getId(), 1);
-                    Toast.makeText(mContext, "Toegevoegd", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        boolean isZichtbaar = !onzichtbareTags.contains(tags.get(position));
+        viewHolder.btnToggleZichtbaarheid.setChecked(isZichtbaar);
 
         return convertView;
     }

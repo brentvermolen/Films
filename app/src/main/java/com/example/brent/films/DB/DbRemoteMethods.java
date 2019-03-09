@@ -248,9 +248,10 @@ public class DbRemoteMethods {
         return data;
     }
 
-    public static void InsertTag(String naam) {
+    public static Tag InsertTag(String naam) {
         Connection con = null;
         String z = "";
+        Tag tag = new Tag();
 
         try {
             con = connectionClass.CONN();
@@ -266,7 +267,73 @@ public class DbRemoteMethods {
 
                 query = "SET IDENTITY_INSERT Tags ON; Insert Into Tags(ID, Naam) Values (" + ++max + ", '" + naam + "'); SET IDENTITY_INSERT Tags OFF;";
                 stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                stmt.executeQuery(query);
+                stmt.execute(query);
+
+                tag.setId(max);
+                tag.setNaam(naam);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return tag;
+    }
+
+    public static void UpdateTag(Tag tag) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Update Tags Set Naam = '" + tag.getNaam() + "' Where ID = " + tag.getId();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.executeUpdate(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static void DeleteTag(Tag tag) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Delete From FilmTags Where Tag_ID = " + tag.getId();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+
+                query = "Delete From Tags Where ID = " + tag.getId();
+                stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

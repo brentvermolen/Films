@@ -4,32 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@color/colorPrimary"
-    android:gravity="center">
+    android:orientation="vertical"
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/lblGenre"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:text="Genre"
         android:layout_margin="10dp"
         android:textColor="@android:color/white"
         android:textSize="25dp"/>
 
     <LinearLayout
-        android:id="@+id/llEigenGenre"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="right">
+        android:gravity="left">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btnEditGenre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/textcolor_btn_tag"
+            style="@style/btnTagFilmDetail"
             android:textAllCaps="false"
             android:src="@drawable/ic_edit"
             android:scaleType="centerCrop"
@@ -39,11 +39,12 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btnDeleteGenre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/textcolor_btn_tag"
+            style="@style/btnTagFilmDetail"
             android:textAllCaps="false"
             android:src="@drawable/ic_delete"
             android:scaleType="centerCrop"
@@ -53,25 +54,26 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"/>
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/llBestaandGenre"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="right">
 
-    <LinearLayout
-        android:id="@+id/llBestaandGenre"
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="right">
+            <ToggleButton
+                android:id="@+id/tglVisibility"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                style="@style/toggleButtonGenre"
+                android:checked="true"
 
-        <ToggleButton
-            android:id="@+id/tglVisibility"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            style="@style/toggleButtonGenre"
-            android:checked="true"
-            android:layout_margin="5dp"
-            android:textOn="Zichtbaar"
-            android:textOff="Niet Zichtbaar"/>
+                android:layout_margin="5dp"
+                android:textOn="Zichtbaar"
+                android:textOff="Niet Zichtbaar"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

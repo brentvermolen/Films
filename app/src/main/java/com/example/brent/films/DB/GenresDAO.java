@@ -35,4 +35,7 @@ public interface GenresDAO {
 
     @Query("Update Tag Set isHidden = (:hidden) Where Id = (:id)")
     void updateVisibility(int id, int hidden);
+
+    @Query("Update Tag Set Naam = (:naam) Where Id = (:id)")
+    void update(int id, String naam);
 }

@@ -2,18 +2,25 @@ package com.example.brent.films;
 
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.example.brent.films.Class.DAC;
+import com.example.brent.films.Class.DialogTextInput;
 import com.example.brent.films.Class.GenresAdapter;
 import com.example.brent.films.DB.DbRemoteMethods;
+import com.example.brent.films.Model.Tag;
+
+import java.util.function.Predicate;
 
 public class GenresActivity extends AppCompatActivity {
 
@@ -49,20 +56,40 @@ public class GenresActivity extends AppCompatActivity {
         btnAddTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Update style
-                AlertDialog.Builder builder = new AlertDialog.Builder(GenresActivity.this);
+                final DialogTextInput dialogTextInput = new DialogTextInput(GenresActivity.this, "Nieuw Genre");
 
-                final EditText txt = new EditText(GenresActivity.this);
-                builder.setView(txt);
-
-                builder.setPositiveButton("Opslaan", new DialogInterface.OnClickListener() {
+                dialogTextInput.setPositiveButton("Opslaan", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DbRemoteMethods.InsertTag(txt.getText().toString());
+                        final String naam = dialogTextInput.txt.getText().toString();
+
+                        new AsyncTask<Void, Void, Void>(){
+                            @Override
+                            protected Void doInBackground(Void... voids) {
+                                DbRemoteMethods.InsertTag(naam);
+
+                                return null;
+                            }
+                        }.execute();
+
+                        int max = 0;
+                        for (Tag t : DAC.Tags){
+                            if (t.getId() > max){
+                                max = t.getId();
+                            }
+                        }
+
+                        Tag t = new Tag();
+                        t.setId(++max);
+                        t.setNaam(naam);
+
+                        DAC.Tags.add(t);
+
+                        lstGenres.setAdapter(new GenresAdapter(GenresActivity.this));
                     }
                 });
 
-                builder.create().show();
+                dialogTextInput.show();
             }
         });
     }
