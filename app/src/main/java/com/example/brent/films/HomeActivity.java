@@ -193,6 +193,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showFilms(List<Film> films){
         films = Methodes.SortFilmsByNameAndCollection(films);
+        setTitle(films.size() + " Films");
 
         currentlyShown = films;
         grdMovies.setAdapter(new MoviesGridView(this, films));

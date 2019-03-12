@@ -105,6 +105,8 @@ public class ZoekenActivity extends AppCompatActivity {
                     }
                 });
 
+                changeTitle();
+
                 resetResultaten();
             }
 
@@ -167,6 +169,16 @@ public class ZoekenActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+        changeTitle();
+
         return true;
+    }
+
+    private void changeTitle() {
+        if(llZoekenActeurs.getVisibility() == View.GONE){
+            setTitle(films.size() + " films");
+        }else {
+            setTitle(acteurs.size() + " acteurs");
+        }
     }
 }
