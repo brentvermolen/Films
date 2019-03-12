@@ -9,7 +9,7 @@
         android:id="@+id/lblTitel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nieuwe Rit"
+        android:text="Titel"
         android:textSize="50dp"
         android:gravity="center"
         android:padding="15dp"
