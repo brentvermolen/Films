@@ -14,7 +14,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DbRemoteMethods {
@@ -32,6 +35,47 @@ public class DbRemoteMethods {
                 z = "Error in connection with SQL server";
             } else {
                 String query = "Select * From Films Order by 2";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    Film film = Film.FromResultSet(rs);
+
+                    data.add(film);
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return data;
+    }
+
+    public static List<Film> GetFilms(Date addedAfter){
+        Connection con = null;
+        List<Film> data = new ArrayList<>();
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String strFormat = format.format(addedAfter);
+
+                String query = "Select * From Films Where Toegevoegd >= '" + strFormat + "' Order by 2";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
 
@@ -108,6 +152,47 @@ public class DbRemoteMethods {
                 z = "Error in connection with SQL server";
             } else {
                 String query = "Select * From ActeurFilms INNER JOIN Acteurs on Acteurs.ID = ActeurID Where ImagePath != 'NULL' AND ImagePath NOT LIKE '%tvdb%'";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    ActeurFilm film = ActeurFilm.FromResultSet(rs);
+
+                    data.add(film);
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return data;
+    }
+
+    public static List<ActeurFilm> GetFilmsActeurs(Date date){
+        Connection con = null;
+        List<ActeurFilm> data = new ArrayList<>();
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String strDate = dateFormat.format(date);
+
+                String query = "Select ActeurFilms.* From Films Inner Join ActeurFilms on Films.ID = ActeurFilms.FilmID INNER JOIN Acteurs on Acteurs.ID = ActeurID Where Films.Toegevoegd >= '" + strDate + "' AND Acteurs.ImagePath != 'NULL' AND Acteurs.ImagePath NOT LIKE '%tvdb%'";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
 
@@ -348,5 +433,45 @@ public class DbRemoteMethods {
         }
 
         Log.e("DB Conn", z);
+    }
+
+    public static List<Acteur> GetActeurs(Date date) {Connection con = null;
+        List<Acteur> data = new ArrayList<>();
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String strDate = dateFormat.format(date);
+
+                String query = "Select Distinct Acteurs.* From Acteurs Inner Join ActeurFilms on Acteurs.ID = ActeurFilms.ActeurID Inner join Films on Films.ID = ActeurFilms.FilmID Where Films.Toegevoegd >= '" + strDate + "' AND Acteurs.ImagePath != 'NULL' AND Acteurs.ImagePath NOT LIKE '%tvdb%'";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    Acteur film = Acteur.FromResultSet(rs);
+
+                    data.add(film);
+                }
+
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return data;
     }
 }

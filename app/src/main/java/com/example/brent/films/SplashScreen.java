@@ -1,17 +1,21 @@
 package com.example.brent.films;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.Methodes;
+import com.example.brent.films.DB.ActeurFilmsDAO;
 import com.example.brent.films.DB.ActeursDAO;
 import com.example.brent.films.DB.CollectiesDAO;
 import com.example.brent.films.DB.DbRemoteMethods;
+import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.DB.GenresDAO;
@@ -25,6 +29,8 @@ import com.example.brent.films.Model.Tag;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class SplashScreen extends AppCompatActivity {
@@ -35,6 +41,9 @@ public class SplashScreen extends AppCompatActivity {
     CollectiesDAO collectiesDAO;
     ActeursDAO acteursDAO;
     GenresDAO genresDAO;
+    ActeurFilmsDAO acteurFilmsDAO;
+    FilmTagsDAO filmTagsDAO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,8 @@ public class SplashScreen extends AppCompatActivity {
         collectiesDAO = FilmsDb.getDatabase(this).collectiesDAO();
         acteursDAO = FilmsDb.getDatabase(this).acteursDAO();
         genresDAO = FilmsDb.getDatabase(this).genresDAO();
+        acteurFilmsDAO = FilmsDb.getDatabase(this).acteurFilmsDAO();
+        filmTagsDAO = FilmsDb.getDatabase(this).filmTagsDAO();
 
         lblProgress = (TextView) findViewById(R.id.lblProgress);
 
@@ -58,14 +69,17 @@ public class SplashScreen extends AppCompatActivity {
             protected Void doInBackground(Void... voids) {
                 Log.e("t", "start download");
 
+                SharedPreferences sharedPreferences = SplashScreen.this.getSharedPreferences("lastSynced", MODE_PRIVATE);
+                Date date = new Date(sharedPreferences.getLong("time", 1262300400000l)); //= 01/01/2010;
+
                 publishProgress("Bezig met laden van films");
 
-                List<Film> films = DbRemoteMethods.GetFilms();
+                List<Film> films = DbRemoteMethods.GetFilms(date);
                 for (Film f : films){
                     try{
                         filmsDAO.insert(f);
                     }catch (Exception e){
-                        Log.e("Films", "Insert: " + f.getNaam());
+                        Log.e("Films", "No Insert: " + f.getNaam());
                     }
                 }
 
@@ -75,7 +89,6 @@ public class SplashScreen extends AppCompatActivity {
                     Methodes.download342Poster(f.getId(), f.getPosterPath());
                     publishProgress("Films: " + ++progress + "/" + count);
                 }
-                DAC.Films = films;
 
                 publishProgress("Bezig met laden van collecties");
 
@@ -85,21 +98,12 @@ public class SplashScreen extends AppCompatActivity {
                         collectiesDAO.insert(c);
                     }
                     catch (Exception e){
-                        Log.e("Collecties", "Insert: " + c.getNaam());
+                        Log.e("Collecties", "No Insert: " + c.getNaam());
                     }
-                }
-                DAC.Collecties = collecties;
-
-                for(Collectie collectie : DAC.Collecties){
-                    collectie.setFilms(Methodes.GetMoviesFromCollection(DAC.Films, collectie));
-                }
-
-                for(Film film : DAC.Films){
-                    film.setCollectie(Methodes.GetCollectionFromID(DAC.Collecties, film.getCollectieID()));
                 }
 
                 publishProgress("Bezig met laden van acteurs");
-                List<Acteur> acteurs = DbRemoteMethods.GetActeurs();
+                List<Acteur> acteurs = DbRemoteMethods.GetActeurs(date);
                 for (Acteur a : acteurs){
                     try{
                         acteursDAO.insert(a);
@@ -114,10 +118,51 @@ public class SplashScreen extends AppCompatActivity {
                     Methodes.download92Poster(a.getId(), a.getPosterPath());
                     publishProgress("Acteurs: " + ++progress + "/" + count);
                 }
-                DAC.Acteurs = acteurs;
 
-                List<ActeurFilm> lstAf = DbRemoteMethods.GetFilmsActeurs();
+                List<ActeurFilm> lstAf = DbRemoteMethods.GetFilmsActeurs(date);
                 for(ActeurFilm af : lstAf) {
+                    try{
+                        acteurFilmsDAO.insert(af);
+                    }catch (Exception e){ }
+                }
+
+                publishProgress("Bezig met laden van genres");
+                List<Tag> tags = DbRemoteMethods.GetTags();
+                for (Tag t : tags){
+                    try{
+                        genresDAO.insert(t);
+                    }catch (Exception e){
+                        Log.e("Genres", "No Insert: " + t.getNaam());
+                    }
+                }
+
+                List<FilmTags> lstFt = DbRemoteMethods.GetFilmTags();
+                for (FilmTags ft : lstFt){
+                    try {
+                        filmTagsDAO.insert(ft);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                publishProgress("Lokale gegevens laden");
+
+                DAC.Films = filmsDAO.getAll();
+                DAC.Collecties = collectiesDAO.getAll();
+                DAC.Acteurs = acteursDAO.getAll();
+                DAC.ActeurFilms = acteurFilmsDAO.getAll();
+                DAC.Tags = genresDAO.getAll();
+                DAC.FilmTags = filmTagsDAO.getAll();
+
+                for(Collectie collectie : DAC.Collecties){
+                    collectie.setFilms(Methodes.GetMoviesFromCollection(DAC.Films, collectie));
+                }
+
+                for(Film film : DAC.Films){
+                    film.setCollectie(Methodes.GetCollectionFromID(DAC.Collecties, film.getCollectieID()));
+                }
+
+                for (ActeurFilm af : DAC.ActeurFilms){
                     Acteur a = Methodes.FindActeurById(DAC.Acteurs, af.getActeurId());
                     Film f = Methodes.FindFilmById(DAC.Films, af.getFilmId());
 
@@ -135,22 +180,8 @@ public class SplashScreen extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                DAC.ActeurFilms = lstAf;
 
-                publishProgress("Bezig met laden van genres");
-                List<Tag> tags = DbRemoteMethods.GetTags();
-                for (Tag t : tags){
-                    try{
-                        genresDAO.insert(t);
-                    }catch (Exception e){
-                        Log.e("Genres", "Insert: " + t.getNaam());
-                    }
-                }
-                DAC.Tags = tags;
-
-                List<FilmTags> lstFt = DbRemoteMethods.GetFilmTags();
-
-                for (FilmTags ft : lstFt){
+                for (FilmTags ft : DAC.FilmTags){
                     Film f = Methodes.FindFilmById(DAC.Films, ft.getFilm_ID());
                     Tag t = Methodes.FindTagById(DAC.Tags, ft.getTag_ID());
 
@@ -165,7 +196,10 @@ public class SplashScreen extends AppCompatActivity {
                     lstFt.add(ft);
                     t.setFilms(lstFt);
                 }
-                DAC.FilmTags = lstFt;
+
+                long lastSynced = System.currentTimeMillis();
+                sharedPreferences.edit().putLong("time", lastSynced).commit();
+
                 return null;
             }
 

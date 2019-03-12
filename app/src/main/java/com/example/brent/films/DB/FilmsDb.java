@@ -12,11 +12,12 @@ import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
+import com.example.brent.films.Model.FilmTags;
 import com.example.brent.films.Model.Tag;
 
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class }, version = 7)
+@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class }, version = 8)
 public abstract class FilmsDb extends RoomDatabase {
     private static FilmsDb INSTANCE;
     private static final String DB_NAME = "Films.db";
@@ -25,6 +26,8 @@ public abstract class FilmsDb extends RoomDatabase {
     public abstract GenresDAO genresDAO();
     public abstract CollectiesDAO collectiesDAO();
     public abstract ActeursDAO acteursDAO();
+    public abstract ActeurFilmsDAO acteurFilmsDAO();
+    public abstract FilmTagsDAO filmTagsDAO();
 
     public static FilmsDb getDatabase (final Context context){
         if (INSTANCE == null) {
@@ -66,12 +69,16 @@ public abstract class FilmsDb extends RoomDatabase {
         private final GenresDAO genresDAO;
         private final CollectiesDAO collectiesDAO;
         private final ActeursDAO acteursDAO;
+        private final FilmTagsDAO filmTagsDAO;
+        private final ActeurFilmsDAO acteurFilmsDAO;
 
         public EmptyAndFillDbAsync(FilmsDb instance) {
             filmsDao = instance.filmsDAO();
             genresDAO = instance.genresDAO();
             collectiesDAO = instance.collectiesDAO();
             acteursDAO = instance.acteursDAO();
+            filmTagsDAO = instance.filmTagsDAO();
+            acteurFilmsDAO = instance.acteurFilmsDAO();
         }
 
         protected Void insertData() {
@@ -79,6 +86,8 @@ public abstract class FilmsDb extends RoomDatabase {
             genresDAO.deleteAll();
             collectiesDAO.deleteAll();
             acteursDAO.deleteAll();
+            filmTagsDAO.deleteAll();
+            acteurFilmsDAO.deleteAll();
 
             return null;
         }

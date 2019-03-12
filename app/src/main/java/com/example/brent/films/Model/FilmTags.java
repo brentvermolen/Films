@@ -1,10 +1,12 @@
 package com.example.brent.films.Model;
 
+import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+@Entity(primaryKeys = {"Film_ID", "Tag_ID"})
 public class FilmTags {
     private int Film_ID;
     private int Tag_ID;
@@ -59,5 +61,10 @@ public class FilmTags {
 
     public void setTag_ID(int tag_ID) {
         Tag_ID = tag_ID;
+    }
+
+    @Override
+    public String toString() {
+        return "F: " + getFilm_ID() + " - T: " + getTag_ID();
     }
 }
