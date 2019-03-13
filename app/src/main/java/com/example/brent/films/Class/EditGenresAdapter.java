@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.brent.films.DB.DbRemoteMethods;
@@ -25,7 +27,6 @@ import java.util.List;
 
 public class EditGenresAdapter extends BaseAdapter {
     private Context mContext;
-    private List<Tag> tags;
 
     private Film film;
 
@@ -41,8 +42,7 @@ public class EditGenresAdapter extends BaseAdapter {
 
         this.film = film;
 
-        this.tags = new ArrayList<>(DAC.Tags);
-        this.tags.sort(new Comparator<Tag>() {
+        DAC.Tags.sort(new Comparator<Tag>() {
             @Override
             public int compare(Tag o1, Tag o2) {
                 return o1.getNaam().compareTo(o2.getNaam());
@@ -51,11 +51,11 @@ public class EditGenresAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        return tags.size();
+        return DAC.Tags.size();
     }
 
     public Tag getItem(int position) {
-        return tags.get(position);
+        return DAC.Tags.get(position);
     }
 
     public long getItemId(int position) {
@@ -63,7 +63,9 @@ public class EditGenresAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        CheckBox chkGenre;
+        //CheckBox chkGenre;
+        Switch chkGenre;
+        TextView lblGenre;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -77,6 +79,7 @@ public class EditGenresAdapter extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.chkGenre = convertView.findViewById(R.id.chkGenre);
+            viewHolder.lblGenre = convertView.findViewById(R.id.lblGenre);
 
             viewHolder.chkGenre.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -93,8 +96,7 @@ public class EditGenresAdapter extends BaseAdapter {
 
                             filmTagsDAO.insert(ft);
                             film.getFilmTags().add(ft);
-                                    //TODO aan tag toevoegen
-                            //Wordt nog niet geupdate in genres op home screen
+                            DAC.Tags.get(position).getFilmTags().add(ft);
                             DAC.FilmTags.add(ft);
                             new AsyncTask<Void, Void, Void>(){
                                 @Override
@@ -109,7 +111,7 @@ public class EditGenresAdapter extends BaseAdapter {
 
                             filmTagsDAO.deleteByFilmAndTagId(ft.getFilm_ID(), ft.getTag_ID());
                             film.getFilmTags().remove(ft);
-                                //TODO van tag verwijderen
+                            DAC.Tags.get(position).getFilmTags().remove(ft);
                             DAC.FilmTags.remove(ft);
                             new AsyncTask<Void, Void, Void>(){
                                 @Override
@@ -131,9 +133,9 @@ public class EditGenresAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.chkGenre.setText(tags.get(position).getNaam());
-        viewHolder.chkGenre.setTag(tags.get(position));
-        viewHolder.chkGenre.setChecked(film.getGenres().contains(tags.get(position)));
+        viewHolder.lblGenre.setText(DAC.Tags.get(position).getNaam());
+        viewHolder.chkGenre.setTag(DAC.Tags.get(position));
+        viewHolder.chkGenre.setChecked(film.getGenres().contains(DAC.Tags.get(position)));
 
         return convertView;
     }

@@ -148,17 +148,20 @@ public class HomeActivity extends AppCompatActivity {
         btns.clear();
 
         genresDAO = FilmsDb.getDatabase(this).genresDAO();
-        List<Tag> tags = new ArrayList<>(DAC.Tags);
-        tags.removeAll(genresDAO.getHiddenTags());
+        List<Tag> tags = genresDAO.getHiddenTags();
 
-        tags.sort(new Comparator<Tag>() {
+        DAC.Tags.sort(new Comparator<Tag>() {
             @Override
             public int compare(Tag o1, Tag o2) {
                 return o1.getNaam().compareTo(o2.getNaam());
             }
         });
 
-        for(final Tag tag : tags){
+        for(final Tag tag : DAC.Tags){
+            if (tags.contains(tag)){
+                continue;
+            }
+
             final Button btnGenre = new Button(this, null, 0, R.style.btnTag);
             btnGenre.setId(tag.getId());
             btns.add(btnGenre);

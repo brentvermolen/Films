@@ -8,7 +8,13 @@
     android:background="@color/colorPrimary"
     android:gravity="center">
 
-    <CheckBox
+    <Switch
+        android:id="@+id/chkGenre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true" />
+
+    <!-- <CheckBox
         android:id="@+id/chkGenre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,5 +22,16 @@
         android:layout_margin="10dp"
         android:textColor="@android:color/white"
         android:textSize="25dp" />
+         -->
+
+    <TextView
+        android:id="@+id/lblGenre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Genre"
+        android:textColor="@android:color/white"
+        android:textSize="25dp"
+        android:paddingLeft="10dp"
+        android:layout_margin="10dp"/>
 
 </LinearLayout>
