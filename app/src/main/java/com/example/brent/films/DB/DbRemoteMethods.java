@@ -435,7 +435,8 @@ public class DbRemoteMethods {
         Log.e("DB Conn", z);
     }
 
-    public static List<Acteur> GetActeurs(Date date) {Connection con = null;
+    public static List<Acteur> GetActeurs(Date date) {
+        Connection con = null;
         List<Acteur> data = new ArrayList<>();
         String z = "";
 
@@ -473,5 +474,63 @@ public class DbRemoteMethods {
 
         Log.e("DB Conn", z);
         return data;
+    }
+
+    public static void InsertFilmTag(FilmTags filmTags) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Insert Into FilmTags Values (" + filmTags.getFilm_ID() + ", " + filmTags.getTag_ID() + ")";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static void DeleteFilmTag(FilmTags filmTags) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Delete From FilmTags Where Film_ID=" + filmTags.getFilm_ID() + " AND Tag_ID=" + filmTags.getTag_ID();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
     }
 }

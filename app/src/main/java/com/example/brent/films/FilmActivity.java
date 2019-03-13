@@ -1,6 +1,7 @@
 package com.example.brent.films;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.brent.films.Class.ActorsFilmGridView;
 import com.example.brent.films.Class.DAC;
+import com.example.brent.films.Class.DialogEditGenres;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.Class.Methodes;
@@ -131,23 +133,7 @@ public class FilmActivity extends AppCompatActivity {
         lblOmschrijving.setText(film.getOmschrijving());
 
         llGenres = (LinearLayout) findViewById(R.id.llGenres);
-        for(final Tag tag : film.getGenres()){
-            final Button btnGenre = new Button(this, null, 0, R.style.btnTagFilmDetail);
-            btnGenre.setId(tag.getId());
-            LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            buttonLayoutParams.setMargins(7, 0, 7, 0);
-            btnGenre.setLayoutParams(buttonLayoutParams);
-            try {
-                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.textcolor_btn_tag_film_detail);
-                ColorStateList colors = ColorStateList.createFromXml(getResources(), parser);
-                btnGenre.setTextColor(colors);
-            } catch (Exception e) {
-                // handle exceptions
-            }
-            btnGenre.setText(tag.getNaam());
-
-            llGenres.addView(btnGenre);
-        }
+        setGenres();
 
         llCollectie = (LinearLayout) findViewById(R.id.llCollectie);
         lblCollectie = (TextView) findViewById(R.id.lblCollectie);
@@ -223,6 +209,28 @@ public class FilmActivity extends AppCompatActivity {
         });
     }
 
+    private void setGenres() {
+        llGenres.removeAllViews();
+
+        for(final Tag tag : film.getGenres()){
+            final Button btnGenre = new Button(this, null, 0, R.style.btnTagFilmDetail);
+            btnGenre.setId(tag.getId());
+            LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            buttonLayoutParams.setMargins(7, 0, 7, 0);
+            btnGenre.setLayoutParams(buttonLayoutParams);
+            try {
+                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.textcolor_btn_tag_film_detail);
+                ColorStateList colors = ColorStateList.createFromXml(getResources(), parser);
+                btnGenre.setTextColor(colors);
+            } catch (Exception e) {
+                // handle exceptions
+            }
+            btnGenre.setText(tag.getNaam());
+
+            llGenres.addView(btnGenre);
+        }
+    }
+
     private void handleEvents() {
         btnOmschrijving.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,7 +291,7 @@ public class FilmActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_film_acteur, menu);
+        getMenuInflater().inflate(R.menu.menu_film, menu);
 
         MenuItem item = menu.findItem(R.id.action_favorite);
 
@@ -313,6 +321,16 @@ public class FilmActivity extends AppCompatActivity {
 
                 dao = FilmsDb.getDatabase(FilmActivity.this).filmsDAO();
 
+                break;
+            case R.id.action_genres:
+                final DialogEditGenres dialogEditGenres = new DialogEditGenres(this, film);
+                dialogEditGenres.setNegativeButton("Sluiten", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //FilmActivity.this.film = dialogEditGenres.film;
+                        setGenres();
+                    }
+                }).show();
                 break;
             case 16908332:
                 onBackPressed();

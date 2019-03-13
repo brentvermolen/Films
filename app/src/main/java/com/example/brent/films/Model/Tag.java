@@ -104,4 +104,9 @@ public class Tag {
     public void setHidden(boolean hidden) {
         isHidden = hidden;
     }
+
+    @Override
+    public String toString() {
+        return getNaam();
+    }
 }

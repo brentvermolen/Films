@@ -19,10 +19,13 @@ public interface FilmTagsDAO {
     List<FilmTags> getAll();
 
     @Query("Select * From FilmTags Where Film_ID=(:id)")
-    FilmTags getByFilmId(int id);
+    List<FilmTags> getByFilmId(int id);
 
     @Query("Select * From FilmTags Where Tag_ID=(:id)")
-    FilmTags getByTagId(int id);
+    List<FilmTags> getByTagId(int id);
+
+    @Query("Select * From FilmTags Where Tag_ID=(:tag_id) AND Film_ID=(:film_id)")
+    FilmTags getByFilmAndTagId(int tag_id, int film_id);
 
     @Insert
     void insert(FilmTags film);
@@ -32,4 +35,7 @@ public interface FilmTagsDAO {
 
     @Query("Delete From FilmTags Where Tag_ID = (:id)")
     void deleteByTagId(int id);
+
+    @Query("Delete From FilmTags Where Film_ID=(:film_id) AND Tag_ID=(:tag_id)")
+    void deleteByFilmAndTagId(int film_id, int tag_id);
 }

@@ -67,4 +67,17 @@ public class FilmTags {
     public String toString() {
         return "F: " + getFilm_ID() + " - T: " + getTag_ID();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        try{
+            FilmTags t = (FilmTags) obj;
+
+            if (t.getFilm_ID() == this.getFilm_ID() && t.getTag_ID() == this.getTag_ID()){
+                return true;
+            }
+        }catch (Exception e){}
+
+        return false;
+    }
 }
