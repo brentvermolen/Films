@@ -11,4 +11,11 @@
         android:icon="@drawable/ic_person"
         app:showAsAction="ifRoom"></item>
 
+    <item
+        android:id="@+id/action_nieuwe_zoeken"
+        android:orderInCategory="200"
+        android:title="Nieuwe Films Zoeken"
+        android:icon="@drawable/ic_person"
+        app:showAsAction="never"></item>
+
 </menu>

@@ -162,6 +162,8 @@ public class ZoekenActivity extends AppCompatActivity {
                     llZoekenFilms.setVisibility(View.VISIBLE);
                 }
                 break;
+            case R.id.action_nieuwe_zoeken:
+                //TODO
             case 16908332:
                 onBackPressed();
                 break;
