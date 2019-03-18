@@ -258,6 +258,17 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 });
                 break;
+            case 3:
+                currentlyShown.sort(new Comparator<Film>() {
+                    @Override
+                    public int compare(Film o1, Film o2) {
+                        if (currentSortDesc){
+                            return o2.getToegevoegd().compareTo(o1.getToegevoegd());
+                        }else {
+                            return o1.getToegevoegd().compareTo(o2.getToegevoegd());
+                        }
+                    }
+                });
         }
     }
 

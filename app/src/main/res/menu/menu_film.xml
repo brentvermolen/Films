@@ -17,4 +17,10 @@
         android:title="Genres Wijzigen"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_verwijder"
+        android:orderInCategory="200"
+        android:title="Verwijder Film"
+        app:showAsAction="never"/>
+
 </menu>

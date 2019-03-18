@@ -41,6 +41,7 @@ public class DialogSorterenOp extends AlertDialog.Builder {
         data.add("Naam");
         data.add("Uitgebracht Op");
         data.add("Duur");
+        data.add("Toegevoegd");
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -56,6 +57,8 @@ public class DialogSorterenOp extends AlertDialog.Builder {
                     case 2:
                         chkOmdraaien.setText("Langste eerst");
                         break;
+                    case 3:
+                        chkOmdraaien.setText("Laatste eerst");
                 }
             }
 

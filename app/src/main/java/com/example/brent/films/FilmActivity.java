@@ -332,6 +332,8 @@ public class FilmActivity extends AppCompatActivity {
                     }
                 }).show();
                 break;
+            case R.id.action_verwijder:
+                //TODO: Verwijderen van een film + verwijderen van acteurs met 0 films + archieven
             case 16908332:
                 onBackPressed();
                 break;
