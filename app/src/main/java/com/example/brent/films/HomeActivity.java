@@ -199,7 +199,14 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void handleEvents() {
-
+        grdMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent,
+                                    View v, int position, long id) {
+                Intent intent = new Intent(HomeActivity.this, FilmActivity.class);
+                intent.putExtra("film_id", currentlyShown.get(position).getId());
+                startActivityForResult(intent, 2);
+            }
+        });
     }
 
     private void showFilms(List<Film> films){
@@ -209,15 +216,6 @@ public class HomeActivity extends AppCompatActivity {
 
         sortCurrentlyShown();
         grdMovies.setAdapter(new MoviesGridView(this, films));
-
-        grdMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent,
-                                    View v, int position, long id) {
-                Intent intent = new Intent(HomeActivity.this, FilmActivity.class);
-                intent.putExtra("film_id", currentlyShown.get(position).getId());
-                startActivity(intent);
-            }
-        });
     }
 
     private void sortCurrentlyShown() {
@@ -285,7 +283,7 @@ public class HomeActivity extends AppCompatActivity {
         switch (id){
             case R.id.action_search:
                 Intent intent = new Intent(HomeActivity.this, ZoekenActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, 2);
                 break;
             case R.id.action_genres:
                 Intent intent1 = new Intent(HomeActivity.this, GenresActivity.class);
@@ -320,6 +318,12 @@ public class HomeActivity extends AppCompatActivity {
         switch (requestCode){
             case 1:
                 setGenreBar();
+            case 2:
+                if (resultCode == 1 && data != null){
+                    int film_id = data.getIntExtra("film_id", 0);
+                    currentlyShown.remove((Integer)film_id);
+                    showFilms(currentlyShown);
+                }
         }
     }
 

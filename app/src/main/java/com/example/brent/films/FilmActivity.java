@@ -8,9 +8,11 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +30,9 @@ import android.widget.Toast;
 import com.example.brent.films.Class.ActorsFilmGridView;
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.DialogEditGenres;
+import com.example.brent.films.DB.ActeursDAO;
+import com.example.brent.films.DB.DbRemoteMethods;
+import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.Class.Methodes;
@@ -38,6 +43,7 @@ import com.example.brent.films.Model.Tag;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Comparator;
+import java.util.List;
 
 public class FilmActivity extends AppCompatActivity {
     Film film;
@@ -331,9 +337,46 @@ public class FilmActivity extends AppCompatActivity {
                         setGenres();
                     }
                 }).show();
+                setResult(1);
                 break;
             case R.id.action_verwijder:
                 //TODO: Verwijderen van een film + verwijderen van acteurs met 0 films + archieven
+                try{
+                    new AsyncTask<Void, Void, Void>(){
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            DAC.Films.remove(film);
+
+                            dao.deleteById(film.getId());
+                            DbRemoteMethods.DeleteFilm(film);
+
+                            List<Integer> ids = DbRemoteMethods.CheckActorsWithoutFilms();
+
+
+                            Methodes.delete342Poster(film.getId());
+                            ActeursDAO aDao = FilmsDb.getDatabase(FilmActivity.this).acteursDAO();
+
+                            for (int id : ids){
+                                aDao.deleteById(id);
+                                Methodes.delete92Poster(id);
+                            }
+
+                            FilmTagsDAO ftDao = FilmsDb.getDatabase(FilmActivity.this).filmTagsDAO();
+                            ftDao.deleteByFilmId(film.getId());
+
+                            Log.e("Films", "Verwijderen success");
+                            return null;
+                        }
+                    };
+
+                    Intent data = new Intent();
+                    data.putExtra("film_id", film.getId());
+                    DAC.Films.size();
+                    setResult(1, data);
+                    finish();
+                }catch (Exception e){
+                    Log.e("Film", "Verwijderen mislukt: " + e.getMessage());
+                }
             case 16908332:
                 onBackPressed();
                 break;

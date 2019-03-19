@@ -119,6 +119,8 @@ public class SplashScreen extends AppCompatActivity {
                     publishProgress("Acteurs: " + ++progress + "/" + count);
                 }
 
+                publishProgress("Acteurs bij juiste films zetten");
+
                 List<ActeurFilm> lstAf = DbRemoteMethods.GetFilmsActeurs(date);
                 for(ActeurFilm af : lstAf) {
                     try{
@@ -127,7 +129,7 @@ public class SplashScreen extends AppCompatActivity {
                 }
 
                 publishProgress("Bezig met laden van genres");
-                List<Tag> tags = DbRemoteMethods.GetTags();
+                List<Tag> tags = DbRemoteMethods.GetTags(date);
                 for (Tag t : tags){
                     try{
                         genresDAO.insert(t);
@@ -136,7 +138,7 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 }
 
-                List<FilmTags> lstFt = DbRemoteMethods.GetFilmTags();
+                List<FilmTags> lstFt = DbRemoteMethods.GetFilmTags(date);
                 for (FilmTags ft : lstFt){
                     try {
                         filmTagsDAO.insert(ft);

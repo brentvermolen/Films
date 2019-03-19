@@ -3,6 +3,7 @@ package com.example.brent.films;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -122,7 +123,7 @@ public class ZoekenActivity extends AppCompatActivity {
                                     View v, int position, long id) {
                 Intent intent = new Intent(ZoekenActivity.this, FilmActivity.class);
                 intent.putExtra("film_id", films.get(position).getId());
-                startActivity(intent);
+                startActivityForResult(intent, 2);
             }
         });
 
@@ -181,6 +182,17 @@ public class ZoekenActivity extends AppCompatActivity {
             setTitle(films.size() + " films");
         }else {
             setTitle(acteurs.size() + " acteurs");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode){
+            case 2:
+                if (resultCode == 1 && data != null){
+                    setResult(1, data);
+                    finish();
+                }
         }
     }
 }

@@ -257,7 +257,7 @@ public class DbRemoteMethods {
         return data;
     }
 
-    public static List<Tag> GetTags() {
+    public static List<Tag> GetTags(Date date) {
         Connection con = null;
         List<Tag> data = new ArrayList<>();
         String z = "";
@@ -268,7 +268,9 @@ public class DbRemoteMethods {
             if (con == null) {
                 z = "Error in connection with SQL server";
             } else {
-                String query = "Select * From Tags";
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+                String query = "SELECT Tags.* FROM Tags Inner Join FilmTags on Tags.ID = FilmTags.Tag_ID Inner Join Films on Films.ID = FilmTags.Film_ID Where Films.Toegevoegd > '" + format.format(date) + "'";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
 
@@ -295,7 +297,7 @@ public class DbRemoteMethods {
         return data;
     }
 
-    public static List<FilmTags> GetFilmTags() {
+    public static List<FilmTags> GetFilmTags(Date date) {
         Connection con = null;
         List<FilmTags> data = new ArrayList<>();
         String z = "";
@@ -306,7 +308,9 @@ public class DbRemoteMethods {
             if (con == null) {
                 z = "Error in connection with SQL server";
             } else {
-                String query = "Select * From FilmTags";
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+                String query = "SELECT FilmTags.* From FilmTags Inner Join Films on Films.ID = FilmTags.Film_ID Where Films.Toegevoegd > '" + format.format(date) + "'";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
 
@@ -532,5 +536,93 @@ public class DbRemoteMethods {
         }
 
         Log.e("DB Conn", z);
+    }
+
+    public static void DeleteFilm(Film film) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Delete From FilmArchiefs Where Film_ID=" + film.getId();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+
+                query = "Delete From ActeurFilms Where FilmID=" + film.getId();
+                stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+
+                query = "Delete From FilmTags Where Film_ID=" + film.getId();
+                stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+
+                query = "Delete From Films Where ID=" + film.getId();
+                stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static List<Integer> CheckActorsWithoutFilms() {
+        Connection con = null;
+        String z = "";
+
+        List<Integer> ids = new ArrayList<>();
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "SELECT Acteurs.ID, Acteurs.Naam, Count(Films.ID) As Aantal FROM Acteurs Inner Join ActeurFilms on Acteurs.ID = ActeurFilms.ActeurID Inner Join Films on Films.ID = ActeurFilms.FilmID Group by Acteurs.ID, Acteurs.Naam Having Count(Films.ID)=0";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    ids.add(rs.getInt(1));
+                }
+
+                for(int id : ids){
+                    try{
+                        query = "Delete From Acteurs Where ID=" + id;
+                        stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                        stmt.execute(query);
+                    }catch (Exception e){
+                        Log.e("Acteurs", "Verwijderen mislukt: " + id);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+
+        return ids;
     }
 }

@@ -10,6 +10,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Environment;
+import android.telephony.mbms.FileInfo;
 import android.util.Log;
 
 import com.example.brent.films.Model.Acteur;
@@ -227,5 +228,27 @@ public class Methodes {
         }
 
         return true;
+    }
+
+    public static void delete342Poster(int id) {
+        try{
+            File dir = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES);
+            dir = new File(dir.getAbsolutePath() + "/Films/films/" + id + ".jpg");
+
+            dir.delete();
+        }catch (Exception e){
+            Log.e("Foto", "Verwijderen mislukt");
+        }
+    }
+
+    public static void delete92Poster(int id) {
+        try{
+            File dir = Environment.getExternalStoragePublicDirectory(DIRECTORY_PICTURES);
+            dir = new File(dir.getAbsolutePath() + "/Films/acteurs/" + id + ".jpg");
+
+            dir.delete();
+        }catch (Exception e){
+            Log.e("Foto", "Verwijderen mislukt");
+        }
     }
 }

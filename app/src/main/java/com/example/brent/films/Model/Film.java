@@ -216,7 +216,14 @@ public class Film {
                 return true;
             }
         }catch (Exception e){
+            try {
+                int film_id = (Integer) obj;
+                if (film_id == this.getId()){
+                    return true;
+                }
+            }catch (Exception ex){
 
+            }
         }
 
         return false;
