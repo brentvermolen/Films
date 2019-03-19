@@ -11,4 +11,5 @@ public class DAC {
     public static List<ActeurFilm> ActeurFilms;
     public static List<Tag> Tags;
     public static List<FilmTags> FilmTags;
+    public static List<Aanvraag> Aanvragen;
 }

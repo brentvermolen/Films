@@ -8,6 +8,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Collectie;
@@ -17,7 +18,7 @@ import com.example.brent.films.Model.Tag;
 
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class }, version = 1)
+@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class, Aanvraag.class}, version = 1)
 public abstract class FilmsDb extends RoomDatabase {
     private static FilmsDb INSTANCE;
     private static final String DB_NAME = "Films.db";
@@ -28,6 +29,7 @@ public abstract class FilmsDb extends RoomDatabase {
     public abstract ActeursDAO acteursDAO();
     public abstract ActeurFilmsDAO acteurFilmsDAO();
     public abstract FilmTagsDAO filmTagsDAO();
+    public abstract AanvraagDAO aanvraagDAO();
 
     public static FilmsDb getDatabase (final Context context){
         if (INSTANCE == null) {
@@ -71,6 +73,7 @@ public abstract class FilmsDb extends RoomDatabase {
         private final ActeursDAO acteursDAO;
         private final FilmTagsDAO filmTagsDAO;
         private final ActeurFilmsDAO acteurFilmsDAO;
+        private final AanvraagDAO aanvraagDAO;
 
         public EmptyAndFillDbAsync(FilmsDb instance) {
             filmsDao = instance.filmsDAO();
@@ -79,6 +82,7 @@ public abstract class FilmsDb extends RoomDatabase {
             acteursDAO = instance.acteursDAO();
             filmTagsDAO = instance.filmTagsDAO();
             acteurFilmsDAO = instance.acteurFilmsDAO();
+            aanvraagDAO = instance.aanvraagDAO();
         }
 
         protected Void insertData() {
@@ -88,6 +92,7 @@ public abstract class FilmsDb extends RoomDatabase {
             acteursDAO.deleteAll();
             filmTagsDAO.deleteAll();
             acteurFilmsDAO.deleteAll();
+            aanvraagDAO.deleteAll();
 
             return null;
         }

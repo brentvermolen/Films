@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.Methodes;
+import com.example.brent.films.DB.AanvraagDAO;
 import com.example.brent.films.DB.ActeurFilmsDAO;
 import com.example.brent.films.DB.ActeursDAO;
 import com.example.brent.films.DB.CollectiesDAO;
@@ -19,6 +20,7 @@ import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.DB.GenresDAO;
+import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Collectie;
@@ -43,6 +45,7 @@ public class SplashScreen extends AppCompatActivity {
     GenresDAO genresDAO;
     ActeurFilmsDAO acteurFilmsDAO;
     FilmTagsDAO filmTagsDAO;
+    AanvraagDAO aanvraagDAO;
 
 
     @Override
@@ -56,6 +59,7 @@ public class SplashScreen extends AppCompatActivity {
         genresDAO = FilmsDb.getDatabase(this).genresDAO();
         acteurFilmsDAO = FilmsDb.getDatabase(this).acteurFilmsDAO();
         filmTagsDAO = FilmsDb.getDatabase(this).filmTagsDAO();
+        aanvraagDAO = FilmsDb.getDatabase(this).aanvraagDAO();
 
         lblProgress = (TextView) findViewById(R.id.lblProgress);
 
@@ -147,6 +151,13 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 }
 
+                publishProgress("Aanvragen inladen");
+
+                List<Aanvraag> aanvraags = DbRemoteMethods.GetAanvragen(date);
+                for (Aanvraag aanvraag : aanvraags){
+                    aanvraagDAO.insert(aanvraag);
+                }
+
                 publishProgress("Lokale gegevens laden");
 
                 DAC.Films = filmsDAO.getAll();
@@ -155,6 +166,7 @@ public class SplashScreen extends AppCompatActivity {
                 DAC.ActeurFilms = acteurFilmsDAO.getAll();
                 DAC.Tags = genresDAO.getAll();
                 DAC.FilmTags = filmTagsDAO.getAll();
+                DAC.Aanvragen = aanvraagDAO.getAll();
 
                 for(Collectie collectie : DAC.Collecties){
                     collectie.setFilms(Methodes.GetMoviesFromCollection(DAC.Films, collectie));
