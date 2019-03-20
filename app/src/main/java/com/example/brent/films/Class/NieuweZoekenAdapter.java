@@ -1,9 +1,10 @@
 package com.example.brent.films.Class;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,32 +12,40 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import com.example.brent.films.DB.DbRemoteMethods;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.DB.GenresDAO;
+import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Film;
+import com.example.brent.films.Model.FilmTags;
 import com.example.brent.films.Model.Tag;
+import com.example.brent.films.NieuweZoekenActivity;
 import com.example.brent.films.R;
 
-import org.w3c.dom.Text;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class NieuweZoekenAdapter extends BaseAdapter {
     private Context mContext;
     private List<Film> films;
 
-    private List<Tag> onzichtbareTags;
-
-    GenresDAO dao;
+    private FilmsDAO dao;
 
     public NieuweZoekenAdapter(Context c, List<Film> films) {
         mContext = c;
-        dao = FilmsDb.getDatabase(c).genresDAO();
+
+        dao = FilmsDb.getDatabase(c).filmsDAO();
 
         this.films = films;
     }
@@ -56,7 +65,6 @@ public class NieuweZoekenAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView lblOmschrijving;
         TextView lblTitel;
-        TextView lblDuur;
         TextView lblJaartal;
         ImageView imgPoster;
         ImageButton btnToevoegen;
@@ -66,17 +74,14 @@ public class NieuweZoekenAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 
-        this.onzichtbareTags = dao.getHiddenTags();
-
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.lst_genre_item, null);
+            convertView = inflater.inflate(R.layout.lst_nieuw_zoeken_item, null);
 
             viewHolder = new ViewHolder();
             viewHolder.imgPoster = convertView.findViewById(R.id.imgPoster);
             viewHolder.lblOmschrijving = convertView.findViewById(R.id.lblOmschrijving);
             viewHolder.lblTitel = convertView.findViewById(R.id.lblTitel);
-            viewHolder.lblDuur = convertView.findViewById(R.id.lblDuur);
             viewHolder.lblJaartal = convertView.findViewById(R.id.lblJaartal);
 
             viewHolder.btnToevoegen = convertView.findViewById(R.id.btnAdd);
@@ -87,7 +92,108 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     v.setEnabled(false);
 
-                    Film f = (Film)viewHolder.imgPoster.getTag();
+                    final Film f = (Film)viewHolder.imgPoster.getTag();
+
+                    new AsyncTask<Void, Void, Void>(){
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            final Film filmToAdd = new Film();
+                            filmToAdd.setId(f.getId());
+                            final List<FilmTags> filmTags = new ArrayList<>();
+
+                            String url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=nl-BE&append_to_response=videos";
+
+                            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                filmToAdd.setCollectieID(response.getJSONObject("belongs_to_collection").getInt("id"));
+                                                for (int i = 0; i < response.getJSONArray("genres").length(); i++){
+                                                    FilmTags ft = new FilmTags();
+                                                    ft.setFilm_ID(filmToAdd.getId());
+                                                    ft.setTag_ID(response.getJSONArray("genres").getJSONObject(i).getInt("id"));
+                                                    filmTags.add(ft);
+                                                }
+                                                if (f.getOmschrijving().equals("")){
+                                                    filmToAdd.setOmschrijving(response.getString("overview"));
+                                                }else{
+                                                    filmToAdd.setOmschrijving(f.getOmschrijving());
+                                                }
+                                                filmToAdd.setNaam(f.getNaam());
+                                                filmToAdd.setReleaseDate(f.getReleaseDate());
+                                                if (f.getPosterPath().equals("")){
+                                                    filmToAdd.setOmschrijving(response.getString("poster_path"));
+                                                }else{
+                                                    filmToAdd.setOmschrijving(f.getPosterPath());
+                                                }
+                                                f.setDuur(response.getInt("runtime"));
+                                                f.setTagline(response.getString("tagline"));
+
+                                                for (int i = 0; i < response.getJSONArray("videos.results").length(); i++){
+                                                    JSONObject video = response.getJSONArray("videos.results").getJSONObject(i);
+                                                    if (video.getString("type").equals("Trailer") && video.getString("site").equals("YouTube")){
+                                                        filmToAdd.setTrailerId(video.getString("key"));
+                                                        break;
+                                                    }
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Toevoegen", "Film " + f.getId() + ": Mislukt: " + error.getMessage());
+                                }
+                            });
+
+                            MyQueue.GetInstance(mContext).add(request);
+
+                            url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=en-US&append_to_response=videos";
+
+                            request = new JsonObjectRequest(Request.Method.GET, url, null,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+                                            try {
+                                                if (filmToAdd.getOmschrijving() == null) {
+                                                    filmToAdd.setOmschrijving(response.getString("overview"));
+                                                }
+
+                                                if (filmToAdd.getPosterPath() == null){
+                                                    filmToAdd.setOmschrijving(response.getString("poster_path"));
+                                                }
+
+                                                filmToAdd.setTagline(response.getString("tagline"));
+
+                                                if (filmToAdd.getTrailerId() == null){
+                                                    for (int i = 0; i < response.getJSONArray("videos.results").length(); i++){
+                                                        JSONObject video = response.getJSONArray("videos.results").getJSONObject(i);
+                                                        if (video.getString("type").equals("Trailer") && video.getString("site").equals("YouTube")){
+                                                            filmToAdd.setTrailerId(video.getString("key"));
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                            filmToAdd.toString();
+                                        }
+                                    }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Log.e("Toevoegen", "Film " + f.getId() + ": Mislukt: " + error.getMessage());
+                                }
+                            });
+
+                            MyQueue.GetInstance(mContext).add(request);
+
+                            return null;
+                        }
+                    }.execute();
                 }
             });
 
@@ -105,16 +211,41 @@ public class NieuweZoekenAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        Film f = films.get(position);
+        final Film f = films.get(position);
         viewHolder.imgPoster.setTag(f);
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... voids) {
+                try {
+                    InputStream is = (InputStream) new URL("http://image.tmdb.org/t/p/w342/" + f.getPosterPath()).getContent();
+                    Bitmap d = BitmapFactory.decodeStream(is);
+                    is.close();
+                    viewHolder.imgPoster.setImageBitmap(d);
+                } catch (Exception e) {
 
-        //TODO Aanvragen laden
+                }
+
+                return null;
+            }
+        }.execute();
+
+        viewHolder.lblTitel.setText(f.getNaam());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+        viewHolder.lblJaartal.setText(dateFormat.format(f.getReleaseDate()));
+        viewHolder.lblOmschrijving.setText(f.getOmschrijving());
+
+        viewHolder.btnToevoegen.setVisibility(View.VISIBLE);
+        viewHolder.btnRequest.setVisibility(View.VISIBLE);
+
+        Aanvraag aanvraag = new Aanvraag();
+        aanvraag.setFilm_ID(f.getId());
+        if (DAC.Aanvragen.contains(aanvraag)){
+            viewHolder.btnRequest.setVisibility(View.GONE);
+        }
+
         if (DAC.Films.contains(f)){
-            viewHolder.btnToevoegen.setEnabled(false);
-            viewHolder.btnRequest.setEnabled(false);
-        }else{
-            viewHolder.btnToevoegen.setEnabled(true);
-            viewHolder.btnRequest.setEnabled(true);
+            viewHolder.btnToevoegen.setVisibility(View.GONE);
+            viewHolder.btnRequest.setVisibility(View.GONE);
         }
 
         return convertView;

@@ -89,12 +89,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center|top"
-            android:layout_margin="15dp">
+            android:layout_marginTop="5dp">
 
             <TextView
+                android:id="@+id/lblProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -102,12 +103,16 @@
                 android:text="Films"
                 android:textStyle="bold"
                 android:textColor="#e5e5e5"/>
+        </LinearLayout>
 
-            <ListView
-                android:id="@+id/lstResultaten"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></ListView>
-            </LinearLayout>
+        <ListView
+            android:id="@+id/lstResultaten"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+        </ListView>
 
     </LinearLayout>
 

@@ -25,4 +25,11 @@
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"></item>
 
+    <item
+        android:id="@+id/action_nieuwe_film_toevoegen"
+        android:orderInCategory="200"
+        android:title="Film Toevoegen"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="never"></item>
+
 </menu>

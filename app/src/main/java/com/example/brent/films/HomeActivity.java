@@ -83,23 +83,16 @@ public class HomeActivity extends AppCompatActivity {
     private void initViews() {
         imgRandHeader = (ImageView) findViewById(R.id.imgRandHeader);
         Random rand = new Random();
-        int randId = rand.nextInt(DAC.Films.size());
         Bitmap bm = null;
         try {
+            int randId = rand.nextInt(DAC.Films.size());
             bm = Methodes.getBitmapFromAsset(this, "films/" + DAC.Films.get(randId).getId() + ".jpg");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         imgRandHeader.setImageBitmap(bm);
 
         llGenres = (LinearLayout) findViewById(R.id.llGenres);
-
-        DAC.Collecties.sort(new Comparator<Collectie>() {
-            @Override
-            public int compare(Collectie o1, Collectie o2) {
-                return o1.getNaam().compareTo(o2.getNaam());
-            }
-        });
 
         btnAlleFilms = (Button) findViewById(R.id.btnTagAlle);
         btnAlleFilms.setEnabled(false);
@@ -303,9 +296,10 @@ public class HomeActivity extends AppCompatActivity {
                 }).setNegativeButton("Stop", null);
 
                 dialogSorterenOp.show();
-
-
                 break;
+            case R.id.action_nieuwe_film_toevoegen:
+                Intent intent2 = new Intent(HomeActivity.this, NieuweZoekenActivity.class);
+                startActivity(intent2);
             default:
                 super.onOptionsItemSelected(item);
         }

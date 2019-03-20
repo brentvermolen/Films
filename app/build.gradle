@@ -35,4 +35,6 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
 
     implementation project(':jtds-1.2.7')
+
+    implementation 'com.mcxiaoke.volley:library:1.0.0'
 }

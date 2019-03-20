@@ -669,4 +669,45 @@ public class DbRemoteMethods {
 
         return aanvragen;
     }
+
+    public static List<Aanvraag> GetAanvragen() {
+        Connection con = null;
+        String z = "";
+
+        List<Aanvraag> aanvragen = new ArrayList<>();
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Select * From Aanvraags";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    Aanvraag aanvraag = new Aanvraag();
+                    aanvraag.setFilm_ID(rs.getInt(1));
+                    aanvraag.setAangevraagdOp(rs.getDate(2));
+                    aanvraag.setGebruiker_ID(rs.getInt(3));
+                    aanvragen.add(aanvraag);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+
+        return aanvragen;
+    }
 }
