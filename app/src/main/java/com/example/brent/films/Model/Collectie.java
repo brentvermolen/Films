@@ -14,6 +14,8 @@ public class Collectie {
     @PrimaryKey
     private int Id;
     private String Naam;
+    @Ignore
+    private String PosterPath;
 
     @Ignore
     private List<Film> Films;
@@ -55,5 +57,26 @@ public class Collectie {
 
     public void setNaam(String naam) {
         Naam = naam;
+    }
+
+    public String getPosterPath() {
+        return PosterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        PosterPath = posterPath;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        try{
+            Collectie collectie = (Collectie) obj;
+
+            if (collectie.getId() == this.getId()){
+                return true;
+            }
+        }catch (Exception e){}
+
+        return false;
     }
 }

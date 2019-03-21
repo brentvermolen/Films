@@ -1,5 +1,6 @@
 package com.example.brent.films;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +10,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -20,6 +23,8 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.brent.films.Class.DAC;
+import com.example.brent.films.Class.Methodes;
 import com.example.brent.films.Class.MyQueue;
 import com.example.brent.films.Class.NieuweZoekenAdapter;
 import com.example.brent.films.Model.Film;
@@ -27,10 +32,12 @@ import com.example.brent.films.Model.Film;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class NieuweZoekenActivity extends AppCompatActivity {
 
@@ -42,6 +49,9 @@ public class NieuweZoekenActivity extends AppCompatActivity {
     TextView lblProgress;
     ListView lstResultaten;
 
+    ImageView imgRandHeader;
+
+    ProgressBar prgLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +71,24 @@ public class NieuweZoekenActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        imgRandHeader = (ImageView) findViewById(R.id.imgRandHeader);
+        Random rand = new Random();
+        int randId = rand.nextInt(DAC.Films.size());
+        Bitmap bm = null;
+        try {
+            bm = Methodes.getBitmapFromAsset(this, "films/" + DAC.Films.get(randId).getId() + ".jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        imgRandHeader.setImageBitmap(bm);
+
         txtNaam = findViewById(R.id.txtZoeken);
         txtJaartal = findViewById(R.id.txtJaartal);
         btnZoeken = findViewById(R.id.btnZoek);
         lblProgress = findViewById(R.id.lblProgress);
         lstResultaten = findViewById(R.id.lstResultaten);
+
+        prgLoading = findViewById(R.id.prgLoading);
     }
 
     private void handleEvents() {
@@ -79,6 +102,12 @@ public class NieuweZoekenActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(final JSONObject response) {
                                 new AsyncTask<Void, Integer, List<Film>>(){
+                                    @Override
+                                    protected void onPreExecute() {
+                                        prgLoading.setVisibility(View.VISIBLE);
+                                        btnZoeken.setEnabled(false);
+                                    }
+
                                     @Override
                                     protected List<Film> doInBackground(Void... voids) {
                                         List<Film> films = new ArrayList<>();
@@ -111,8 +140,11 @@ public class NieuweZoekenActivity extends AppCompatActivity {
 
                                     @Override
                                     protected void onPostExecute(List<Film> films) {
-                                        NieuweZoekenAdapter adapter = new NieuweZoekenAdapter(NieuweZoekenActivity.this, films);
+                                        NieuweZoekenAdapter adapter = new NieuweZoekenAdapter(NieuweZoekenActivity.this, films, prgLoading);
                                         lstResultaten.setAdapter(adapter);
+
+                                        prgLoading.setVisibility(View.GONE);
+                                        btnZoeken.setEnabled(true);
                                     }
 
                                     @Override

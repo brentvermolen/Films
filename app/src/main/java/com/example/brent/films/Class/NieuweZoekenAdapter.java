@@ -11,20 +11,25 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.brent.films.DB.DbRemoteMethods;
+import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
-import com.example.brent.films.DB.GenresDAO;
 import com.example.brent.films.Model.Aanvraag;
+import com.example.brent.films.Model.Acteur;
+import com.example.brent.films.Model.ActeurFilm;
+import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.FilmTags;
 import com.example.brent.films.Model.Tag;
-import com.example.brent.films.NieuweZoekenActivity;
 import com.example.brent.films.R;
 
 import org.json.JSONException;
@@ -40,12 +45,12 @@ public class NieuweZoekenAdapter extends BaseAdapter {
     private Context mContext;
     private List<Film> films;
 
-    private FilmsDAO dao;
+    private ProgressBar prgLoading;
 
-    public NieuweZoekenAdapter(Context c, List<Film> films) {
+    public NieuweZoekenAdapter(Context c, List<Film> films, ProgressBar progressBar) {
         mContext = c;
 
-        dao = FilmsDb.getDatabase(c).filmsDAO();
+        prgLoading = progressBar;
 
         this.films = films;
     }
@@ -96,12 +101,17 @@ public class NieuweZoekenAdapter extends BaseAdapter {
 
                     new AsyncTask<Void, Void, Void>(){
                         @Override
+                        protected void onPreExecute() {
+                            prgLoading.setVisibility(View.VISIBLE);
+                        }
+
+                        @Override
                         protected Void doInBackground(Void... voids) {
                             final Film filmToAdd = new Film();
                             filmToAdd.setId(f.getId());
                             final List<FilmTags> filmTags = new ArrayList<>();
 
-                            String url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=nl-BE&append_to_response=videos";
+                            String url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=nl-BE&append_to_response=videos,credits";
 
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                                     new Response.Listener<JSONObject>() {
@@ -109,78 +119,127 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                                         public void onResponse(JSONObject response) {
                                             try {
                                                 filmToAdd.setCollectieID(response.getJSONObject("belongs_to_collection").getInt("id"));
+                                                Collectie collectie = new Collectie();
+                                                collectie.setId(filmToAdd.getCollectieID());
+                                                collectie.setNaam(response.getJSONObject("belongs_to_collection").getString("name"));
+                                                collectie.setPosterPath(response.getJSONObject("belongs_to_collection").getString("poster_path"));
+                                                filmToAdd.setCollectie(collectie);
+
                                                 for (int i = 0; i < response.getJSONArray("genres").length(); i++){
+                                                    JSONObject genre = response.getJSONArray("genres").getJSONObject(i);
                                                     FilmTags ft = new FilmTags();
                                                     ft.setFilm_ID(filmToAdd.getId());
-                                                    ft.setTag_ID(response.getJSONArray("genres").getJSONObject(i).getInt("id"));
+                                                    ft.setTag_ID(genre.getInt("id"));
+
+                                                    Tag tag = new Tag();
+                                                    tag.setId(genre.getInt("id"));
+                                                    tag.setNaam(genre.getString("name"));
+                                                    ft.setTag(tag);
+
                                                     filmTags.add(ft);
                                                 }
-                                                if (f.getOmschrijving().equals("")){
-                                                    filmToAdd.setOmschrijving(response.getString("overview"));
-                                                }else{
-                                                    filmToAdd.setOmschrijving(f.getOmschrijving());
-                                                }
+                                                filmToAdd.setGenres(filmTags);
+
+                                                filmToAdd.setOmschrijving(response.getString("overview"));
                                                 filmToAdd.setNaam(f.getNaam());
                                                 filmToAdd.setReleaseDate(f.getReleaseDate());
-                                                if (f.getPosterPath().equals("")){
-                                                    filmToAdd.setOmschrijving(response.getString("poster_path"));
-                                                }else{
-                                                    filmToAdd.setOmschrijving(f.getPosterPath());
-                                                }
-                                                f.setDuur(response.getInt("runtime"));
-                                                f.setTagline(response.getString("tagline"));
+                                                filmToAdd.setPosterPath(response.getString("poster_path"));
+                                                filmToAdd.setDuur(response.getInt("runtime"));
+                                                filmToAdd.setTagline(response.getString("tagline"));
 
-                                                for (int i = 0; i < response.getJSONArray("videos.results").length(); i++){
-                                                    JSONObject video = response.getJSONArray("videos.results").getJSONObject(i);
+                                                for (int i = 0; i < response.getJSONObject("videos").getJSONArray("results").length(); i++){
+                                                    JSONObject video = response.getJSONObject("videos").getJSONArray("results").getJSONObject(i);
                                                     if (video.getString("type").equals("Trailer") && video.getString("site").equals("YouTube")){
                                                         filmToAdd.setTrailerId(video.getString("key"));
                                                         break;
                                                     }
                                                 }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("Toevoegen", "Film " + f.getId() + ": Mislukt: " + error.getMessage());
-                                }
-                            });
+                                                List<ActeurFilm> acteurs = new ArrayList<>();
+                                                for (int i = 0; i < response.getJSONObject("credits").getJSONArray("cast").length(); i++){
+                                                    JSONObject a = response.getJSONObject("credits").getJSONArray("cast").getJSONObject(i);
+                                                    if (a.getInt("order") < 15){
+                                                        Acteur acteur = new Acteur();
+                                                        acteur.setId(a.getInt("id"));
+                                                        acteur.setNaam(a.getString("name"));
+                                                        acteur.setPosterPath(a.getString("profile_path"));
 
-                            MyQueue.GetInstance(mContext).add(request);
+                                                        ActeurFilm af = new ActeurFilm();
+                                                        af.setKarakter(a.getString("character"));
+                                                        af.setSort(a.getInt("order"));
+                                                        af.setActeurId(acteur.getId());
+                                                        af.setActeur(acteur);
+                                                        af.setFilmId(filmToAdd.getId());
 
-                            url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=en-US&append_to_response=videos";
-
-                            request = new JsonObjectRequest(Request.Method.GET, url, null,
-                                    new Response.Listener<JSONObject>() {
-                                        @Override
-                                        public void onResponse(JSONObject response) {
-                                            try {
-                                                if (filmToAdd.getOmschrijving() == null) {
-                                                    filmToAdd.setOmschrijving(response.getString("overview"));
-                                                }
-
-                                                if (filmToAdd.getPosterPath() == null){
-                                                    filmToAdd.setOmschrijving(response.getString("poster_path"));
-                                                }
-
-                                                filmToAdd.setTagline(response.getString("tagline"));
-
-                                                if (filmToAdd.getTrailerId() == null){
-                                                    for (int i = 0; i < response.getJSONArray("videos.results").length(); i++){
-                                                        JSONObject video = response.getJSONArray("videos.results").getJSONObject(i);
-                                                        if (video.getString("type").equals("Trailer") && video.getString("site").equals("YouTube")){
-                                                            filmToAdd.setTrailerId(video.getString("key"));
-                                                            break;
-                                                        }
+                                                        acteurs.add(af);
                                                     }
                                                 }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
+                                                filmToAdd.setActeurs(acteurs);
 
-                                            filmToAdd.toString();
+                                                String url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=en-US&append_to_response=videos";
+
+                                                JsonObjectRequest request2 = new JsonObjectRequest(Request.Method.GET, url, null,
+                                                        new Response.Listener<JSONObject>() {
+                                                            @Override
+                                                            public void onResponse(JSONObject response) {
+                                                                try {
+                                                                    if (filmToAdd.getOmschrijving().equals("")) {
+                                                                        filmToAdd.setOmschrijving(response.getString("overview"));
+                                                                    }
+
+                                                                    if (filmToAdd.getPosterPath().equals("")){
+                                                                        filmToAdd.setOmschrijving(response.getString("poster_path"));
+                                                                    }
+
+                                                                    if (filmToAdd.getTagline().equals("")){
+                                                                        filmToAdd.setTagline(response.getString("tagline"));
+                                                                    }
+
+                                                                    if (filmToAdd.getTrailerId() == null){
+                                                                        for (int i = 0; i < response.getJSONObject("videos").getJSONArray("results").length(); i++){
+                                                                            JSONObject video = response.getJSONObject("videos").getJSONArray("results").getJSONObject(i);
+                                                                            if (video.getString("type").equals("Trailer") && video.getString("site").equals("YouTube")){
+                                                                                filmToAdd.setTrailerId(video.getString("key"));
+                                                                                break;
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    DbRemoteMethods.InsertFilm(filmToAdd);
+
+                                                                    if (!DAC.Collecties.contains(filmToAdd.getCollectie())){
+                                                                        DbRemoteMethods.InsertCollectie(filmToAdd.getCollectie());
+                                                                    }
+
+                                                                    for (ActeurFilm af : filmToAdd.getActeurs()){
+                                                                        if (!DAC.Acteurs.contains(af.getActeur())){
+                                                                            DbRemoteMethods.InsertActeur(af.getActeur());
+                                                                        }
+                                                                        DbRemoteMethods.InsertFilmActeur(af);
+                                                                    }
+
+                                                                    for(FilmTags ft : filmTags){
+                                                                        if (!DAC.Tags.contains(ft.getTag())){
+                                                                            DbRemoteMethods.InsertTag(ft.getTag());
+                                                                        }
+                                                                        DbRemoteMethods.InsertFilmTag(ft);
+                                                                    }
+
+                                                                    Toast.makeText(mContext, "Film toegevoegd! Zal aan je collectie worden toegevoegd wanneer je de app opnieuw opstart!", Toast.LENGTH_LONG).show();
+                                                                } catch (JSONException e) {
+                                                                    Log.e("Toevoegen", "Film " + f.getId() + ": Mislukt: " + e.getMessage());
+                                                                }
+                                                            }
+                                                        }, new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        Log.e("Toevoegen", "Film " + f.getId() + ": Mislukt: " + error.getMessage());
+                                                    }
+                                                });
+
+                                                MyQueue.GetInstance(mContext).add(request2);
+                                            } catch (JSONException e) {
+                                                Log.e("Toevoegen", "Film " + f.getId() + ": Mislukt: " + e.getMessage());
+                                            }
                                         }
                                     }, new Response.ErrorListener() {
                                 @Override
@@ -192,6 +251,11 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                             MyQueue.GetInstance(mContext).add(request);
 
                             return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            prgLoading.setVisibility(View.GONE);
                         }
                     }.execute();
                 }

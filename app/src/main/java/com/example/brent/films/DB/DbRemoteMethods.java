@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -349,11 +350,14 @@ public class DbRemoteMethods {
             if (con == null) {
                 z = "Error in connection with SQL server";
             } else {
-                String query = "Select Max(ID) From Tags";
+                String query = "Select Max(ID) From Tags Where ID>=100";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
-                rs.first();
-                int max = rs.getInt(1);
+                int max = 99;
+                try{
+                    rs.first();
+                    max = rs.getInt(1);
+                }catch (Exception e){ }
 
                 query = "SET IDENTITY_INSERT Tags ON; Insert Into Tags(ID, Naam) Values (" + ++max + ", '" + naam + "'); SET IDENTITY_INSERT Tags OFF;";
                 stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -376,6 +380,35 @@ public class DbRemoteMethods {
 
         Log.e("DB Conn", z);
         return tag;
+    }
+
+    public static void InsertTag(Tag tag) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "SET IDENTITY_INSERT Tags ON; Insert Into Tags(ID, Naam) Values (" + tag.getId() + ", '" + tag.getNaam() + "'); SET IDENTITY_INSERT Tags OFF;";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
     }
 
     public static void UpdateTag(Tag tag) {
@@ -492,6 +525,38 @@ public class DbRemoteMethods {
                 z = "Error in connection with SQL server";
             } else {
                 String query = "Insert Into FilmTags Values (" + filmTags.getFilm_ID() + ", " + filmTags.getTag_ID() + ")";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static void InsertFilmActeur(ActeurFilm acteurFilm) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Insert Into ActeurFilms Values (" + acteurFilm.getActeurId() +
+                        ", " + acteurFilm.getFilmId() +
+                        ", '" + acteurFilm.getKarakter() +
+                        "', " + acteurFilm.getSort() + ")";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 stmt.execute(query);
             }
@@ -709,5 +774,110 @@ public class DbRemoteMethods {
         Log.e("DB Conn", z);
 
         return aanvragen;
+    }
+
+    public static void InsertFilm(Film film) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date today = new Date();
+                today.setTime(Calendar.getInstance().getTimeInMillis());
+                SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+
+                String query = "Insert Into Films Values (" + film.getId() +
+                        ", '" + film.getNaam().replace("'", "\"") +
+                        "', '" + dateFormat1.format(film.getReleaseDate()) +
+                        "', '" + film.getTagline().replace("'", "\"") +
+                        "', " + film.getDuur() +
+                        ", '" + film.getOmschrijving().replace("'", "\"") +
+                        "', '" + film.getTrailerId() +
+                        "', '" + dateFormat.format(today) +
+                        "', '" + film.getPosterPath() +
+                        "', " + film.getCollectieID() + ")";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static void InsertCollectie(Collectie collectie) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Insert Into Collecties Values (" + collectie.getId() +
+                        ", '" + collectie.getNaam() +
+                        "', '" + collectie.getPosterPath() + "')";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static void InsertActeur(Acteur acteur) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Insert Into Acteurs Values (" + acteur.getId() +
+                        ", '" + acteur.getNaam() +
+                        "', '" + acteur.getPosterPath() + "')";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
     }
 }

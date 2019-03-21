@@ -30,12 +30,14 @@ import android.widget.Toast;
 import com.example.brent.films.Class.ActorsFilmGridView;
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.DialogEditGenres;
+import com.example.brent.films.DB.ActeurFilmsDAO;
 import com.example.brent.films.DB.ActeursDAO;
 import com.example.brent.films.DB.DbRemoteMethods;
 import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.Class.Methodes;
+import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.Tag;
@@ -196,14 +198,14 @@ public class FilmActivity extends AppCompatActivity {
         btnTrailer = (ImageButton) findViewById(R.id.btnTrailer);
 
         grdActors = (GridView) findViewById(R.id.grdActors);
-        film.getActeurs().sort(new Comparator<ActeurFilm>() {
+        List<ActeurFilm> acteurs = film.getActeurs();
+        acteurs.sort(new Comparator<ActeurFilm>() {
             @Override
             public int compare(ActeurFilm o1, ActeurFilm o2) {
                 return o1.getSort() - o2.getSort();
             }
         });
-
-        grdActors.setAdapter(new ActorsFilmGridView(this, film.getActeurs()));
+        grdActors.setAdapter(new ActorsFilmGridView(this, acteurs));
 
         grdActors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent,
@@ -345,15 +347,13 @@ public class FilmActivity extends AppCompatActivity {
                     new AsyncTask<Void, Void, Void>(){
                         @Override
                         protected Void doInBackground(Void... voids) {
-                            DAC.Films.remove(film);
-
                             dao.deleteById(film.getId());
+                            DAC.Films.remove(film);
                             DbRemoteMethods.DeleteFilm(film);
 
-                            List<Integer> ids = DbRemoteMethods.CheckActorsWithoutFilms();
-
-
                             Methodes.delete342Poster(film.getId());
+
+                            List<Integer> ids = DbRemoteMethods.CheckActorsWithoutFilms();
                             ActeursDAO aDao = FilmsDb.getDatabase(FilmActivity.this).acteursDAO();
 
                             for (int id : ids){
@@ -363,11 +363,13 @@ public class FilmActivity extends AppCompatActivity {
 
                             FilmTagsDAO ftDao = FilmsDb.getDatabase(FilmActivity.this).filmTagsDAO();
                             ftDao.deleteByFilmId(film.getId());
+                            ActeurFilmsDAO afDao = FilmsDb.getDatabase(FilmActivity.this).acteurFilmsDAO();
+                            afDao.deleteByFilmId(film.getId());
 
                             Log.e("Films", "Verwijderen success");
                             return null;
                         }
-                    };
+                    }.execute();
 
                     Intent data = new Intent();
                     data.putExtra("film_id", film.getId());

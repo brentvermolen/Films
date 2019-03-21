@@ -105,14 +105,28 @@
                 android:textColor="#e5e5e5"/>
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/lstResultaten"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp">
+            android:layout_height="match_parent">
 
-        </ListView>
+            <ListView
+                android:id="@+id/lstResultaten"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
+
+            </ListView>
+
+            <ProgressBar
+                android:id="@+id/prgLoading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateDuration="1500"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

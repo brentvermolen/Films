@@ -68,4 +68,17 @@ public class Acteur {
     public void setPosterPath(String posterPath) {
         PosterPath = posterPath;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        try{
+            Acteur acteur = (Acteur) obj;
+
+            if (acteur.getId() == this.getId()){
+                return true;
+            }
+        }catch (Exception e){}
+
+        return false;
+    }
 }
