@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoBar"
         android:usesCleartextTraffic="true">
+        <activity android:name=".AanvragenActivity"></activity>
+        <activity android:name=".BeheerActivity" />
         <activity android:name=".HomeActivity" />
         <activity
             android:name=".SplashScreen"
@@ -39,9 +41,11 @@
         <activity
             android:name=".GenresActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NieuweZoekenActivity"></activity>
+        <activity android:name=".NieuweZoekenActivity" />
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false" />
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

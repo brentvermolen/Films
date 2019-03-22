@@ -143,8 +143,8 @@ public class NieuweZoekenActivity extends AppCompatActivity {
                                         NieuweZoekenAdapter adapter = new NieuweZoekenAdapter(NieuweZoekenActivity.this, films, prgLoading);
                                         lstResultaten.setAdapter(adapter);
 
-                                        prgLoading.setVisibility(View.GONE);
                                         btnZoeken.setEnabled(true);
+                                        prgLoading.setVisibility(View.GONE);
                                     }
 
                                     @Override

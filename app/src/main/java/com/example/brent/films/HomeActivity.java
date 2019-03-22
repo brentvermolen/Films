@@ -297,8 +297,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 dialogSorterenOp.show();
                 break;
-            case R.id.action_nieuwe_film_toevoegen:
-                Intent intent2 = new Intent(HomeActivity.this, NieuweZoekenActivity.class);
+            case R.id.action_film_beheer:
+                Intent intent2 = new Intent(HomeActivity.this, BeheerActivity.class);
                 startActivity(intent2);
             default:
                 super.onOptionsItemSelected(item);

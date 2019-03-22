@@ -21,15 +21,15 @@
     <item
         android:id="@+id/action_genres"
         android:orderInCategory="200"
-        android:title="Categorieën beheren"
+        android:title="Genres"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"></item>
 
     <item
-        android:id="@+id/action_nieuwe_film_toevoegen"
+        android:id="@+id/action_film_beheer"
         android:orderInCategory="200"
-        android:title="Film Toevoegen"
-        android:icon="@drawable/ic_add"
+        android:title="Film Beheer"
+        android:icon="@drawable/ic_settings"
         app:showAsAction="never"></item>
 
 </menu>

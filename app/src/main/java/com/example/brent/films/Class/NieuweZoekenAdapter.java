@@ -109,10 +109,10 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                         protected Void doInBackground(Void... voids) {
                             final Film filmToAdd = new Film();
                             filmToAdd.setId(f.getId());
-                            final List<FilmTags> filmTags = new ArrayList<>();
 
                             String url = "https://api.themoviedb.org/3/movie/" + f.getId() + "?api_key=2719fd17f1c54d219dedc3aa9309a1e2&language=nl-BE&append_to_response=videos,credits";
 
+                            final List<FilmTags> filmTags = new ArrayList<>();
                             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                                     new Response.Listener<JSONObject>() {
                                         @Override
@@ -187,7 +187,7 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                                                                     }
 
                                                                     if (filmToAdd.getPosterPath().equals("")){
-                                                                        filmToAdd.setOmschrijving(response.getString("poster_path"));
+                                                                        filmToAdd.setPosterPath(response.getString("poster_path"));
                                                                     }
 
                                                                     if (filmToAdd.getTagline().equals("")){
@@ -208,6 +208,13 @@ public class NieuweZoekenAdapter extends BaseAdapter {
 
                                                                     if (!DAC.Collecties.contains(filmToAdd.getCollectie())){
                                                                         DbRemoteMethods.InsertCollectie(filmToAdd.getCollectie());
+                                                                    }
+
+                                                                    Aanvraag aanvraag = new Aanvraag();
+                                                                    aanvraag.setFilm_ID(filmToAdd.getId());
+                                                                    if (DAC.Aanvragen.contains(aanvraag)){
+                                                                        DbRemoteMethods.DeleteAanvraag(filmToAdd.getId());
+                                                                        FilmsDb.getDatabase(mContext).aanvraagDAO().deleteByFilmId(filmToAdd.getId());
                                                                     }
 
                                                                     for (ActeurFilm af : filmToAdd.getActeurs()){
