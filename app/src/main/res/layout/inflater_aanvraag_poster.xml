@@ -27,7 +27,7 @@
             android:text="Jaartal"
             android:gravity="center"
             android:textStyle="bold"
-            android:textSize="15dp"/>
+            android:textSize="25dp"/>
 
     </LinearLayout>
 

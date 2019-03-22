@@ -1,13 +1,16 @@
 package com.example.brent.films;
 
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -18,9 +21,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.brent.films.Class.AanvragenGridView;
 import com.example.brent.films.Class.DAC;
+import com.example.brent.films.Class.DialogTextOutput;
 import com.example.brent.films.Class.Methodes;
 import com.example.brent.films.Class.MyQueue;
 import com.example.brent.films.DB.AanvraagDAO;
+import com.example.brent.films.DB.DbRemoteMethods;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Acteur;
@@ -91,10 +96,38 @@ public class AanvragenActivity extends AppCompatActivity {
     }
 
     private void handleEvents() {
+        grdAanvragen.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                DialogTextOutput dialog = new DialogTextOutput(AanvragenActivity.this, "Bent u zeker?", "Bent u zeker dat u de aanvraag wil verwijderen?");
 
+                try{
+                    dialog.setPositiveButton("Verwijder", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final Film film = ((AanvragenGridView)grdAanvragen.getAdapter()).getItem(position);
+                            Aanvraag aanvraag = new Aanvraag();
+                            aanvraag.setFilm_ID(film.getId());
+                            DAC.Aanvragen.remove(aanvraag);
+                            FilmsDb.getDatabase(AanvragenActivity.this).aanvraagDAO().deleteByFilmId(film.getId());
+                            new AsyncTask<Void, Void, Void>(){
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    DbRemoteMethods.DeleteAanvraag(film.getId());
+                                    return null;
+                                }
+                            }.execute();
+                            ((AanvragenGridView)grdAanvragen.getAdapter()).removeItem(film);
+                        }
+                    }).setNegativeButton("Annuleer", null).show();
+                }catch (Exception e){
+                    e.getMessage();
+                }
+
+                return false;
+            }
+        });
     }
-
-
 
     private void setAanvragen() {
         List<Aanvraag> aanvragen = dao.getAll();

@@ -47,6 +47,11 @@ public class AanvragenGridView extends BaseAdapter {
         public TextView lblJaartal;
     }
 
+    public void removeItem(Film film){
+        films.remove(film);
+        notifyDataSetChanged();
+    }
+
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 

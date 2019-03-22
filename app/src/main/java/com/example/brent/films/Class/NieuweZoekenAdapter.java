@@ -30,6 +30,7 @@ import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.FilmTags;
 import com.example.brent.films.Model.Tag;
+import com.example.brent.films.NieuweZoekenActivity;
 import com.example.brent.films.R;
 
 import org.json.JSONException;
@@ -273,7 +274,22 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     v.setEnabled(false);
 
-                    Film f = (Film)viewHolder.imgPoster.getTag();
+                    final Film f = (Film)viewHolder.imgPoster.getTag();
+                    new AsyncTask<Void, Void, Void>(){
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            Aanvraag aanvraag = new Aanvraag();
+                            aanvraag.setFilm_ID(f.getId());
+
+                            aanvraag = DbRemoteMethods.InsertAanvraag(aanvraag);
+
+                            DAC.Aanvragen.add(aanvraag);
+                            FilmsDb.getDatabase(mContext).aanvraagDAO().insert(aanvraag);
+                            return null;
+                        }
+                    }.execute();
+
+                    v.setVisibility(View.GONE);
                 }
             });
 

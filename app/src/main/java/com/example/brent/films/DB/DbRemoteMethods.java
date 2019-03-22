@@ -1,6 +1,5 @@
 package com.example.brent.films.DB;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.brent.films.Model.Aanvraag;
@@ -16,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -706,7 +704,7 @@ public class DbRemoteMethods {
             } else {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-                String query = "Select * From Aanvraags Where AangevraagdOp>'" + format.format(date) + "'";
+                String query = "Select * From Aanvraags Where AangevraagOp>'" + format.format(date) + "'";
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
 
@@ -879,6 +877,43 @@ public class DbRemoteMethods {
         }
 
         Log.e("DB Conn", z);
+    }
+
+    public static Aanvraag InsertAanvraag(Aanvraag aanvraag) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date date = new Date(Calendar.getInstance().getTimeInMillis());
+                aanvraag.setAangevraagdOp(date);
+                aanvraag.setGebruiker_ID(1);
+
+                String query = "Insert Into Aanvraags Values (" + aanvraag.getFilm_ID() +
+                        ", '" + format.format(date) +
+                        "', " + 1 + ")";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return aanvraag;
     }
 
     public static void DeleteAanvraag(int film_id) {
