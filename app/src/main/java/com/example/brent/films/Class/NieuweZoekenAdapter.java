@@ -119,12 +119,16 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             try {
-                                                filmToAdd.setCollectieID(response.getJSONObject("belongs_to_collection").getInt("id"));
-                                                Collectie collectie = new Collectie();
-                                                collectie.setId(filmToAdd.getCollectieID());
-                                                collectie.setNaam(response.getJSONObject("belongs_to_collection").getString("name"));
-                                                collectie.setPosterPath(response.getJSONObject("belongs_to_collection").getString("poster_path"));
-                                                filmToAdd.setCollectie(collectie);
+                                                try{
+                                                    filmToAdd.setCollectieID(response.getJSONObject("belongs_to_collection").getInt("id"));
+                                                    Collectie collectie = new Collectie();
+                                                    collectie.setId(filmToAdd.getCollectieID());
+                                                    collectie.setNaam(response.getJSONObject("belongs_to_collection").getString("name"));
+                                                    collectie.setPosterPath(response.getJSONObject("belongs_to_collection").getString("poster_path"));
+                                                    filmToAdd.setCollectie(collectie);
+                                                }catch (Exception e){
+                                                    filmToAdd.setCollectieID(0);
+                                                }
 
                                                 for (int i = 0; i < response.getJSONArray("genres").length(); i++){
                                                     JSONObject genre = response.getJSONArray("genres").getJSONObject(i);
