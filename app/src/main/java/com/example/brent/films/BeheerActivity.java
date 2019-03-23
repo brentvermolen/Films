@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.brent.films.Class.DAC;
+import com.example.brent.films.Class.GebruikersAdapter;
 import com.example.brent.films.Class.Methodes;
 import com.example.brent.films.Class.MyQueue;
 import com.example.brent.films.DB.AanvraagDAO;
@@ -57,6 +59,9 @@ public class BeheerActivity extends AppCompatActivity {
 
     Button btnFilmToevoegen;
     Button btnBekijkAanragen;
+
+    ListView lstGebruikers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +99,10 @@ public class BeheerActivity extends AppCompatActivity {
 
         btnFilmToevoegen = findViewById(R.id.btnFilmToevoegen);
         btnBekijkAanragen = findViewById(R.id.btnAanvragenBekijken);
+
+        lstGebruikers = findViewById(R.id.lstGebruikers);
+        GebruikersAdapter adapter = new GebruikersAdapter(this);
+        lstGebruikers.setAdapter(adapter);
     }
 
     private void handleEvents() {

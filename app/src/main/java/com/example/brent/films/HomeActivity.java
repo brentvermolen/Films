@@ -28,11 +28,9 @@ import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.DB.GenresDAO;
 import com.example.brent.films.Class.MoviesGridView;
 import com.example.brent.films.Class.Methodes;
-import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.Tag;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -297,7 +295,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 dialogSorterenOp.show();
                 break;
-            case R.id.action_film_beheer:
+            case R.id.action_beheer:
                 Intent intent2 = new Intent(HomeActivity.this, BeheerActivity.class);
                 startActivity(intent2);
             default:

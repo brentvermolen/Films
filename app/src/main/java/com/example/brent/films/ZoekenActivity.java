@@ -26,6 +26,7 @@ import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.Film;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -58,6 +59,9 @@ public class ZoekenActivity extends AppCompatActivity {
         mToolbar.setBackgroundColor(Color.argb(100,255,255,255));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        acteurs = new ArrayList<>();
+        films = new ArrayList<>();
 
         initViews();
         handleEvents();

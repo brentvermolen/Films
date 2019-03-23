@@ -8,6 +8,7 @@ import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.FilmTags;
+import com.example.brent.films.Model.Gebruiker;
 import com.example.brent.films.Model.Tag;
 
 import java.sql.Connection;
@@ -943,5 +944,57 @@ public class DbRemoteMethods {
         }
 
         Log.e("DB Conn", z);
+    }
+
+    public static List<Gebruiker> GetGebruikers() {
+        List<Gebruiker> gebruikers = new ArrayList<>();
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "SELECT ID, Voornaam, Achternaam, Geboortedatum, Email, Adres, Postcode, Max(ProviderKey) as Login" +
+                        " FROM [vermolens_trakt].[dbo].[Gebruikers]" +
+                        " Inner Join GebruikerLogins on Gebruikers.ID = Gebruiker_ID" +
+                        " Group by ID, Voornaam, Achternaam, Geboortedatum, Email, Adres, Postcode";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                rs.first();
+
+                while (rs.next()){
+                    SimpleDateFormat dateFormatGeboorteDatum = new SimpleDateFormat("dd/MM/yyyy");
+                    SimpleDateFormat dateFormatLastLogin = new SimpleDateFormat("dd-MM-yyyy hh:ss");
+
+                    Gebruiker gebruiker = new Gebruiker();
+                    gebruiker.setId(rs.getInt(1));
+                    gebruiker.setVoornaam(rs.getString(2));
+                    gebruiker.setAchternaam(rs.getString(3));
+                    gebruiker.setGeboorteDatum(dateFormatGeboorteDatum.parse(rs.getString(4)));
+                    gebruiker.setEmail(rs.getString(5));
+                    gebruiker.setAdres(rs.getString(6));
+                    gebruiker.setPostcode(rs.getInt(7));
+                    gebruiker.setLastLogin(dateFormatLastLogin.parse(rs.getString(8)));
+                    gebruikers.add(gebruiker);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return gebruikers;
     }
 }

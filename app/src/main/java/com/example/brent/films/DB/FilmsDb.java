@@ -14,11 +14,13 @@ import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.FilmTags;
+import com.example.brent.films.Model.Gebruiker;
 import com.example.brent.films.Model.Tag;
 
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class, Aanvraag.class}, version = 1)
+@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class, Aanvraag.class, Gebruiker.class},
+            version = 2)
 public abstract class FilmsDb extends RoomDatabase {
     private static FilmsDb INSTANCE;
     private static final String DB_NAME = "Films.db";
@@ -30,6 +32,7 @@ public abstract class FilmsDb extends RoomDatabase {
     public abstract ActeurFilmsDAO acteurFilmsDAO();
     public abstract FilmTagsDAO filmTagsDAO();
     public abstract AanvraagDAO aanvraagDAO();
+    public abstract GebruikersDAO gebruikersDAO();
 
     public static FilmsDb getDatabase (final Context context){
         if (INSTANCE == null) {
@@ -74,6 +77,7 @@ public abstract class FilmsDb extends RoomDatabase {
         private final FilmTagsDAO filmTagsDAO;
         private final ActeurFilmsDAO acteurFilmsDAO;
         private final AanvraagDAO aanvraagDAO;
+        private final GebruikersDAO gebruikersDAO;
 
         public EmptyAndFillDbAsync(FilmsDb instance) {
             filmsDao = instance.filmsDAO();
@@ -83,6 +87,7 @@ public abstract class FilmsDb extends RoomDatabase {
             filmTagsDAO = instance.filmTagsDAO();
             acteurFilmsDAO = instance.acteurFilmsDAO();
             aanvraagDAO = instance.aanvraagDAO();
+            gebruikersDAO = instance.gebruikersDAO();
         }
 
         protected Void insertData() {
@@ -93,6 +98,7 @@ public abstract class FilmsDb extends RoomDatabase {
             filmTagsDAO.deleteAll();
             acteurFilmsDAO.deleteAll();
             aanvraagDAO.deleteAll();
+            gebruikersDAO.deleteAll();
 
             return null;
         }

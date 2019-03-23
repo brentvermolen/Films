@@ -19,6 +19,7 @@ import com.example.brent.films.DB.DbRemoteMethods;
 import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
+import com.example.brent.films.DB.GebruikersDAO;
 import com.example.brent.films.DB.GenresDAO;
 import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Acteur;
@@ -26,6 +27,7 @@ import com.example.brent.films.Model.ActeurFilm;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.FilmTags;
+import com.example.brent.films.Model.Gebruiker;
 import com.example.brent.films.Model.Tag;
 
 import java.io.IOException;
@@ -46,6 +48,7 @@ public class SplashScreen extends AppCompatActivity {
     ActeurFilmsDAO acteurFilmsDAO;
     FilmTagsDAO filmTagsDAO;
     AanvraagDAO aanvraagDAO;
+    GebruikersDAO gebruikersDAO;
 
 
     @Override
@@ -60,6 +63,7 @@ public class SplashScreen extends AppCompatActivity {
         acteurFilmsDAO = FilmsDb.getDatabase(this).acteurFilmsDAO();
         filmTagsDAO = FilmsDb.getDatabase(this).filmTagsDAO();
         aanvraagDAO = FilmsDb.getDatabase(this).aanvraagDAO();
+        gebruikersDAO = FilmsDb.getDatabase(this).gebruikersDAO();
 
         lblProgress = (TextView) findViewById(R.id.lblProgress);
 
@@ -155,7 +159,22 @@ public class SplashScreen extends AppCompatActivity {
 
                 List<Aanvraag> aanvraags = DbRemoteMethods.GetAanvragen(date);
                 for (Aanvraag aanvraag : aanvraags){
-                    aanvraagDAO.insert(aanvraag);
+                    try{
+                        aanvraagDAO.insert(aanvraag);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                publishProgress("Gebruikers laden");
+
+                List<Gebruiker> gebruikers = DbRemoteMethods.GetGebruikers();
+                for (Gebruiker gebruiker : gebruikers){
+                    try{
+                        gebruikersDAO.insert(gebruiker);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 publishProgress("Lokale gegevens laden");
@@ -167,6 +186,7 @@ public class SplashScreen extends AppCompatActivity {
                 DAC.Tags = genresDAO.getAll();
                 DAC.FilmTags = filmTagsDAO.getAll();
                 DAC.Aanvragen = aanvraagDAO.getAll();
+                DAC.Gebruikers= gebruikersDAO.getAll();
 
                 for(Collectie collectie : DAC.Collecties){
                     collectie.setFilms(Methodes.GetMoviesFromCollection(DAC.Films, collectie));

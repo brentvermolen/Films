@@ -26,9 +26,9 @@
         app:showAsAction="ifRoom"></item>
 
     <item
-        android:id="@+id/action_film_beheer"
+        android:id="@+id/action_beheer"
         android:orderInCategory="200"
-        android:title="Film Beheer"
+        android:title="Beheer"
         android:icon="@drawable/ic_settings"
         app:showAsAction="never"></item>
 
