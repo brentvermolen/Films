@@ -139,7 +139,18 @@ public class NieuweZoekenAdapter extends BaseAdapter {
                                                     Tag tag = new Tag();
                                                     tag.setId(genre.getInt("id"));
                                                     tag.setNaam(genre.getString("name"));
-                                                    ft.setTag(tag);
+
+                                                    if (DAC.Tags.contains(tag)){
+                                                        for (Tag t : DAC.Tags){
+                                                            if (t.equals(tag)){
+                                                                ft.setTag(t);
+                                                                ft.setTag_ID(t.getId());
+                                                                break;
+                                                            }
+                                                        }
+                                                    }else{
+                                                        ft.setTag(tag);
+                                                    }
 
                                                     filmTags.add(ft);
                                                 }

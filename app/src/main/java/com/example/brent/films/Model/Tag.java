@@ -89,7 +89,7 @@ public class Tag {
         try{
             Tag t = (Tag)obj;
 
-            if (t.getId() == this.getId()){
+            if (t.getNaam().equals(this.getNaam())){
                 return true;
             }
         }catch (Exception e){}
