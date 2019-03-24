@@ -3,6 +3,7 @@ package com.example.brent.films;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.graphics.Bitmap;
@@ -66,8 +67,10 @@ public class HomeActivity extends AppCompatActivity {
         mToolbar.setBackgroundColor(Color.argb(100,255,255,255));
         setSupportActionBar(mToolbar);
 
-        currentSort = 0;
-        currentSortDesc = false;
+        SharedPreferences sharedPref = getSharedPreferences("Order", MODE_PRIVATE);
+
+        currentSort = sharedPref.getInt("currentSort", 0);
+        currentSortDesc = sharedPref.getBoolean("currentSortDesc", false);
 
         currentlyShown = DAC.Films;
 
@@ -288,6 +291,10 @@ public class HomeActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         currentSort = dialogSorterenOp.getSpinnerValue();
                         currentSortDesc = dialogSorterenOp.getDescending();
+
+                        getSharedPreferences("Order", MODE_PRIVATE).edit()
+                                .putInt("currentSort", currentSort)
+                                .putBoolean("currentSortDesc", currentSortDesc).commit();
 
                         showFilms(currentlyShown);
                     }
