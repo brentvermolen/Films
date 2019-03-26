@@ -59,6 +59,8 @@ public class GenresActivity extends AppCompatActivity {
     private void initViews() {
         item_favorieten = (LinearLayout) findViewById(R.id.lst_item_favorieten);
         ((TextView)item_favorieten.findViewById(R.id.lblGenre)).setText("Favorieten");
+        ((ImageButton)item_favorieten.findViewById(R.id.btnEditGenre)).setVisibility(View.GONE);
+        ((ImageButton)item_favorieten.findViewById(R.id.btnDeleteGenre)).setVisibility(View.GONE);
 
         final ToggleButton tglVisibility = (ToggleButton)item_favorieten.findViewById(R.id.tglVisibility);
         tglVisibility.setChecked(sharedPref.getBoolean("favorieten", true));
