@@ -68,7 +68,6 @@
                 android:layout_height="match_parent"
                 style="@style/toggleButtonGenre"
                 android:checked="true"
-
                 android:layout_margin="5dp"
                 android:textOn="Zichtbaar"
                 android:textOff="Niet Zichtbaar"/>

@@ -1,6 +1,7 @@
 package com.example.brent.films;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -9,10 +10,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.DialogTextInput;
@@ -25,9 +31,12 @@ import java.util.function.Predicate;
 public class GenresActivity extends AppCompatActivity {
 
     ListView lstGenres;
+    LinearLayout item_favorieten;
     Toolbar mToolbar;
 
     ImageView btnAddTag;
+
+    SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +50,26 @@ public class GenresActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        sharedPref = getSharedPreferences("Visibility", MODE_PRIVATE);
+
         initViews();
         handleEvents();
     }
 
     private void initViews() {
+        item_favorieten = (LinearLayout) findViewById(R.id.lst_item_favorieten);
+        ((TextView)item_favorieten.findViewById(R.id.lblGenre)).setText("Favorieten");
+
+        final ToggleButton tglVisibility = (ToggleButton)item_favorieten.findViewById(R.id.tglVisibility);
+        tglVisibility.setChecked(sharedPref.getBoolean("favorieten", true));
+
+        tglVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedPref.edit().putBoolean("favorieten", tglVisibility.isChecked()).commit();
+            }
+        });
+
         lstGenres = (ListView) findViewById(R.id.lstGenres);
         lstGenres.setAdapter(new GenresAdapter(this));
 

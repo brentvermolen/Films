@@ -93,7 +93,7 @@ public class SplashScreen extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = SplashScreen.this.getSharedPreferences("lastSynced", MODE_PRIVATE);
                 Date date = new Date(sharedPreferences.getLong("time", 1262300400000l)); //= 01/01/2010;
-                date = new Date(1262300400000l);
+                //date = new Date(1262300400000l);
 
                 publishProgress("Bezig met laden van films");
 

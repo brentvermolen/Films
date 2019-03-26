@@ -83,12 +83,21 @@
 
         </LinearLayout>
 
+        <include
+            android:id="@+id/lst_item_favorieten"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/lst_genre_item"></include>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2px"
+            android:background="#20000000"></View>
+
         <ListView
             android:id="@+id/lstGenres"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-
 
         </ListView>
 

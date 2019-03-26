@@ -57,6 +57,8 @@ public class HomeActivity extends AppCompatActivity {
     private int currentSort;
     private boolean currentSortDesc;
 
+    private SharedPreferences sharedPrefVisibility;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,8 @@ public class HomeActivity extends AppCompatActivity {
 
         filmsDAO = FilmsDb.getDatabase(this).filmsDAO();
         genresDAO = FilmsDb.getDatabase(this).genresDAO();
+
+        sharedPrefVisibility = getSharedPreferences("Visibility", MODE_PRIVATE);
 
         initViews();
         handleEvents();
@@ -187,6 +191,12 @@ public class HomeActivity extends AppCompatActivity {
             });
 
             llGenres.addView(btnGenre);
+        }
+
+        if (sharedPrefVisibility.getBoolean("favorieten", true)){
+            btnFavorieten.setVisibility(View.VISIBLE);
+        }else{
+            btnFavorieten.setVisibility(View.GONE);
         }
 
         btnAlleFilms.performClick();
