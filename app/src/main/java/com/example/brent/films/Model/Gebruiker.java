@@ -94,8 +94,18 @@ public class Gebruiker {
         this.lastLogin = lastLogin;
     }
 
-    public List<GebruikerArchief> getArchieven() {
+    public List<GebruikerArchief> getGebruikerArchieven() {
         return (archieven == null) ? new ArrayList<GebruikerArchief>() : archieven;
+    }
+
+    public List<Archief> getArchieven(){
+        List<Archief> archiefs = new ArrayList<>();
+
+        for (GebruikerArchief ga : getGebruikerArchieven()){
+            archiefs.add(ga.getArchief());
+        }
+
+        return archiefs;
     }
 
     public void setArchieven(List<GebruikerArchief> archieven) {

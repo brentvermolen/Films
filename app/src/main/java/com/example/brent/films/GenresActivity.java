@@ -22,9 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.example.brent.films.Class.ArchievenAdapter;
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.DialogTextInput;
 import com.example.brent.films.Class.GenresAdapter;
+import com.example.brent.films.Class.Methodes;
 import com.example.brent.films.DB.DbRemoteMethods;
 import com.example.brent.films.Model.Tag;
 
@@ -39,6 +41,9 @@ public class GenresActivity extends AppCompatActivity {
     ImageView btnAddTag;
 
     SharedPreferences sharedPref;
+
+    LinearLayout llGenres;
+    ListView lstArchieven;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,10 @@ public class GenresActivity extends AppCompatActivity {
         lstGenres.setAdapter(new GenresAdapter(this));
 
         btnAddTag = (ImageView) findViewById(R.id.btnAddTag);
+
+        llGenres = (LinearLayout) findViewById(R.id.llGenres);
+        lstArchieven = (ListView) findViewById(R.id.lstArchieven);
+        lstArchieven.setAdapter(new ArchievenAdapter(this));
     }
 
     private void handleEvents() {
@@ -136,10 +145,12 @@ public class GenresActivity extends AppCompatActivity {
             case R.id.action_toggle:
                 if (item.getTitle().equals("Archieven")){
                     item.setTitle("Genres");
-
+                    llGenres.setVisibility(View.GONE);
+                    lstArchieven.setVisibility(View.VISIBLE);
                 }else{
                     item.setTitle("Archieven");
-
+                    lstArchieven.setVisibility(View.GONE);
+                    llGenres.setVisibility(View.VISIBLE);
                 }
                 break;
         }

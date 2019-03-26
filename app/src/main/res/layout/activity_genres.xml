@@ -108,21 +108,13 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/llArchieven"
+        <ListView
+            android:id="@+id/lstArchieven"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:visibility="gone">
 
-            <ListView
-                android:id="@+id/lstArchieven"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </ListView>
-
-        </LinearLayout>
+        </ListView>
 
     </LinearLayout>
 

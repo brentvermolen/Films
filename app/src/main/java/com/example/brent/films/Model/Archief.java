@@ -12,6 +12,7 @@ public class Archief {
     @PrimaryKey
     private int id;
     private String naam;
+    private boolean visible;
 
     @Ignore
     private List<FilmArchief> films;
@@ -51,6 +52,14 @@ public class Archief {
 
     public void setFilms(List<FilmArchief> films) {
         this.films = films;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     @Override

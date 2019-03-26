@@ -1089,4 +1089,33 @@ public class DbRemoteMethods {
         Log.e("DB Conn", z);
         return new Object[] { filmArchiefs, gebruikerArchiefs };
     }
+
+    public static void UpdateArchief(Archief archief) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Update Archiefs Set Naam = '" + archief.getNaam() + "' Where ID = " + archief.getId();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.executeUpdate(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
 }

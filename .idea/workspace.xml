@@ -21,11 +21,16 @@
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.10.1/taskHistory/taskHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/assetWizardSettings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/DbRemoteMethods.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/DbRemoteMethods.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmsDb.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmsDb.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_genres.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_genres.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/menu/menu_home.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/menu/menu_home.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,45 +64,45 @@
     <session id="308330861">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.4" value="3" />
+          <entry key="project.open.time.4" value="4" />
           <entry key="project.open.time.5" value="3" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="4" />
           <entry key="gradle" value="3" />
-          <entry key="java" value="13878" />
-          <entry key="xml" value="1137" />
+          <entry key="java" value="15160" />
+          <entry key="xml" value="1144" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Groovy" value="3" />
-          <entry key="JAVA" value="13878" />
+          <entry key="JAVA" value="15160" />
           <entry key="PLAIN_TEXT" value="4" />
-          <entry key="XML" value="1137" />
+          <entry key="XML" value="1144" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="gradle" value="1" />
-          <entry key="java" value="120" />
+          <entry key="java" value="133" />
           <entry key="png" value="3" />
-          <entry key="xml" value="49" />
+          <entry key="xml" value="51" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Groovy" value="1" />
           <entry key="Image" value="3" />
-          <entry key="JAVA" value="120" />
-          <entry key="XML" value="49" />
+          <entry key="JAVA" value="133" />
+          <entry key="XML" value="51" />
         </counts>
       </usages-collector>
     </session>
@@ -107,30 +112,104 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="138" lean-forward="true" selection-start-line="138" selection-end-line="138" />
+            <state relative-caret-position="765">
+              <caret line="87" column="66" selection-start-line="87" selection-start-column="66" selection-end-line="87" selection-end-column="66" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_genres.xml">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="118" column="45" selection-start-line="118" selection-start-column="45" selection-end-line="118" selection-end-column="45" />
+            <state relative-caret-position="325">
+              <caret line="326" column="44" selection-start-line="326" selection-start-column="44" selection-end-line="326" selection-end-column="44" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/HomeActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="295">
+              <caret line="150" selection-start-line="150" selection-end-line="150" />
+              <folding>
+                <element signature="e#4737#4916#0" expanded="true" />
+                <element signature="e#4915#4916#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="456">
+              <caret line="107" column="24" selection-start-line="107" selection-start-column="24" selection-end-line="107" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_genres.xml">
+          <provider editor-type-id="android-designer2" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="512">
+              <caret line="109" selection-start-line="109" selection-end-line="109" />
               <folding>
                 <element signature="e#447#1567#0" />
               </folding>
             </state>
           </provider>
-          <provider editor-type-id="android-designer2" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/ArchievenAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="46" column="5" lean-forward="true" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
+              <folding>
+                <element signature="e#1203#1261#0" expanded="true" />
+                <element signature="e#2509#3115#0" expanded="true" />
+                <element signature="e#3114#3115#0" expanded="true" />
+                <element signature="e#3244#4675#0" expanded="true" />
+                <element signature="e#3559#4596#0" expanded="true" />
+                <element signature="e#3923#4268#0" expanded="true" />
+                <element signature="e#4267#4268#0" expanded="true" />
+                <element signature="e#4595#4596#0" expanded="true" />
+                <element signature="e#4674#4675#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/ZoekenActivity.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/GenresAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="143" lean-forward="true" selection-start-line="143" selection-end-line="143" />
+            <state relative-caret-position="416">
+              <caret line="82" selection-start-line="82" selection-end-line="82" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="325">
+              <caret line="34" column="49" selection-start-line="34" selection-start-column="49" selection-end-line="34" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="399">
+              <caret line="56" column="32" selection-start-line="56" selection-start-column="32" selection-end-line="56" selection-end-column="32" />
+              <folding>
+                <element signature="e#1260#1261#0" expanded="true" />
+                <element signature="e#1307#1308#0" expanded="true" />
+                <element signature="e#1345#1346#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -158,6 +237,7 @@
       <find>rs.first</find>
       <find>DAC</find>
       <find>user_id</find>
+      <find>UpdateT</find>
     </findStrings>
     <replaceStrings>
       <replace>aanvraag.getFilm_ID()</replace>
@@ -2649,7 +2729,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/DialogSorterenOp.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/AanvraagDAO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Aanvraag.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/MyQueue.java" />
@@ -2679,27 +2758,28 @@
         <option value="$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher_movie_round.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Film.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmArchiefDAO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/GebruikerArchief.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/FilmArchief.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmsDb.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/GebruikerArchiefDAO.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/GebruikerArchief.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/Methodes.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/DAC.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/DbRemoteMethods.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/EditGenresAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/lst_genre_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/HomeActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/GenresAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_home.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_genres_archieven.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/activity_genres.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/DbRemoteMethods.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmsDb.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/ArchievenAdapter.java" />
       </list>
     </option>
   </component>
@@ -2717,8 +2797,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="ProjectPane" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -2747,6 +2828,20 @@
             <path>
               <item name="Films" type="1abcf292:AndroidViewProjectNode" />
               <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="films" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="DB" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Films" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="java" type="edd41e36:AndroidSourceTypeNode" />
+              <item name="films" type="cbb59c9e:AndroidPsiDirectoryNode" />
+              <item name="Model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Films" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
             </path>
             <path>
@@ -2765,7 +2860,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -2917,7 +3011,7 @@
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Image Layers" order="6" />
-      <window_info content_ui="combo" id="Project" order="7" visible="true" weight="0.25100672" />
+      <window_info active="true" content_ui="combo" id="Project" order="7" visible="true" weight="0.25100672" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32907802" />
@@ -2925,7 +3019,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32907802" />
-      <window_info anchor="bottom" id="Build" order="7" weight="0.3248227" />
+      <window_info anchor="bottom" id="Build" order="7" visible="true" weight="0.3248227" />
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32907802" />
       <window_info anchor="bottom" id="Logcat" order="10" weight="0.3219858" />
@@ -2938,7 +3032,7 @@
       <window_info anchor="right" id="Device File Explorer" order="4" side_tool="true" weight="0.3295302" />
       <window_info anchor="right" id="Gradle" order="5" weight="0.3295302" />
       <window_info anchor="right" id="Theme Preview" order="6" />
-      <window_info active="true" anchor="right" id="Preview" order="7" visible="true" weight="0.3281879" />
+      <window_info anchor="right" id="Preview" order="7" weight="0.3281879" />
       <window_info anchor="right" id="Palette&#9;" order="8" />
       <window_info anchor="right" x="0" y="0" width="337" height="638" id="Documentation" order="9" side_tool="true" weight="0.3295302" />
       <window_info anchor="right" id="Assistant" order="10" weight="0.3295302" />
@@ -3079,35 +3173,13 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_text_input.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret selection-end-line="37" selection-end-column="15" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/Sdk/sources/android-28/android/widget/Adapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="63" column="11" selection-start-line="63" selection-start-column="11" selection-end-line="63" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="70" selection-start-line="15" selection-start-column="70" selection-end-line="15" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/dialog_text_output.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/DialogTextOutput.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -3124,12 +3196,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/inflater_aanvraag_poster.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="387">
           <caret line="25" column="51" selection-start-line="25" selection-start-column="51" selection-end-line="25" selection-end-column="51" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/AanvragenGridView.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -3139,16 +3211,16 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/lst_nieuw_zoeken_item.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="387">
           <caret line="66" column="55" selection-start-line="66" selection-start-column="55" selection-end-line="66" selection-end-column="55" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_acteur.xml">
-      <provider selected="true" editor-type-id="text-editor" />
       <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/TimeStampConverter.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -3158,12 +3230,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_beheer.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
           <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/BeheerActivity.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -3180,17 +3252,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/lst_gebruiker_item.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="38" selection-start-line="13" selection-start-column="38" selection-end-line="13" selection-end-column="38" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Tag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="88" column="12" selection-start-line="88" selection-start-column="12" selection-end-line="88" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -3211,12 +3276,12 @@
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_splash_screen.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml">
       <provider selected="true" editor-type-id="text-editor" />
@@ -3236,12 +3301,12 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="13" column="40" selection-start-line="13" selection-start-column="40" selection-end-line="13" selection-end-column="40" />
         </state>
       </provider>
-      <provider editor-type-id="android-manifest" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/DialogSorterenOp.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -3254,13 +3319,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="34" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -3278,24 +3336,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="97" column="82" selection-start-line="97" selection-start-column="82" selection-end-line="97" selection-end-column="82" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Film.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
           <caret line="143" column="29" selection-start-line="143" selection-start-column="29" selection-end-line="143" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="39" column="29" selection-start-line="39" selection-start-column="29" selection-end-line="39" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -3310,9 +3354,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="22" column="32" selection-start-line="22" selection-start-column="32" selection-end-line="22" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3327,9 +3368,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="5" column="48" selection-start-line="5" selection-start-column="48" selection-end-line="5" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3337,29 +3375,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="731">
           <caret line="60" column="21" selection-start-line="60" selection-start-column="21" selection-end-line="60" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#767#768#0" expanded="true" />
-            <element signature="e#799#800#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmsDb.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="39" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/DbRemoteMethods.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5593">
-          <caret line="365" column="36" selection-start-line="365" selection-start-column="36" selection-end-line="365" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#GetFilms#0;class#DbRemoteMethods#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3378,74 +3393,164 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/lst_genre_item.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="302">
           <caret line="29" column="26" lean-forward="true" selection-start-line="29" selection-start-column="26" selection-end-line="29" selection-end-column="26" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/GenresAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_home.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="22" column="37" selection-start-line="22" selection-start-column="37" selection-end-line="22" selection-end-column="37" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="80" selection-start-line="80" selection-end-line="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-32">
-          <caret line="277" column="51" lean-forward="true" selection-start-line="277" selection-start-column="51" selection-end-line="278" selection-end-column="58" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/ZoekenActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="143" lean-forward="true" selection-start-line="143" selection-end-line="143" />
+        <state relative-caret-position="1938">
+          <caret line="143" selection-start-line="143" selection-end-line="143" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/DbRemoteMethods.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="1101" column="20" selection-start-line="1101" selection-start-column="20" selection-end-line="1101" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#GetFilms#0;class#DbRemoteMethods#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Archief.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="56" column="32" selection-start-line="56" selection-start-column="32" selection-end-line="56" selection-end-column="32" />
+          <folding>
+            <element signature="e#1260#1261#0" expanded="true" />
+            <element signature="e#1307#1308#0" expanded="true" />
+            <element signature="e#1345#1346#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/menu/menu_genres_archieven.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
-          <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
+          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/FilmsDb.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="138" lean-forward="true" selection-start-line="138" selection-end-line="138" />
+        <state relative-caret-position="153">
+          <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build/generated/source/apt/debug/com/example/brent/films/DB/FilmsDAO_Impl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="170" selection-start-line="170" selection-end-line="170" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/SplashScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="326" column="44" selection-start-line="326" selection-start-column="44" selection-end-line="326" selection-end-column="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_genres.xml">
+      <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="118" column="45" selection-start-line="118" selection-start-column="45" selection-end-line="118" selection-end-column="45" />
+        <state relative-caret-position="512">
+          <caret line="109" selection-start-line="109" selection-end-line="109" />
           <folding>
             <element signature="e#447#1567#0" />
           </folding>
         </state>
       </provider>
-      <provider editor-type-id="android-designer2" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Gebruiker.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="107" column="24" selection-start-line="107" selection-start-column="24" selection-end-line="107" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Model/Tag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="88" column="12" selection-start-line="88" selection-start-column="12" selection-end-line="88" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="295">
+          <caret line="150" selection-start-line="150" selection-end-line="150" />
+          <folding>
+            <element signature="e#4737#4916#0" expanded="true" />
+            <element signature="e#4915#4916#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/GenresActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="765">
+          <caret line="87" column="66" selection-start-line="87" selection-start-column="66" selection-end-line="87" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/GenresAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="416">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/GenresDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="13" column="17" selection-start-line="13" selection-start-column="17" selection-end-line="13" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/DB/ArchiefDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="34" column="49" selection-start-line="34" selection-start-column="49" selection-end-line="34" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/example/brent/films/Class/ArchievenAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="46" column="5" lean-forward="true" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
+          <folding>
+            <element signature="e#1203#1261#0" expanded="true" />
+            <element signature="e#2509#3115#0" expanded="true" />
+            <element signature="e#3114#3115#0" expanded="true" />
+            <element signature="e#3244#4675#0" expanded="true" />
+            <element signature="e#3559#4596#0" expanded="true" />
+            <element signature="e#3923#4268#0" expanded="true" />
+            <element signature="e#4267#4268#0" expanded="true" />
+            <element signature="e#4595#4596#0" expanded="true" />
+            <element signature="e#4674#4675#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

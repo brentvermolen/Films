@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 @Database(entities =  { Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class,
                         Aanvraag.class, Gebruiker.class, Archief.class, FilmArchief.class, GebruikerArchief.class },
-            version = 2)
+            version = 1)
 public abstract class FilmsDb extends RoomDatabase {
     private static FilmsDb INSTANCE;
     private static final String DB_NAME = "Films.db";

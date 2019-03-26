@@ -272,48 +272,60 @@ public class SplashScreen extends AppCompatActivity {
                     Film f = Methodes.FindFilmById(DAC.Films, ft.getFilm_ID());
                     Tag t = Methodes.FindTagById(DAC.Tags, ft.getTag_ID());
 
-                    ft.setFilm(f);
-                    ft.setTag(t);
+                    try{
+                        ft.setFilm(f);
+                        ft.setTag(t);
 
-                    lstFt = f.getFilmTags();
-                    lstFt.add(ft);
-                    f.setGenres(lstFt);
+                        lstFt = f.getFilmTags();
+                        lstFt.add(ft);
+                        f.setGenres(lstFt);
 
-                    lstFt = t.getFilmTags();
-                    lstFt.add(ft);
-                    t.setFilms(lstFt);
+                        lstFt = t.getFilmTags();
+                        lstFt.add(ft);
+                        t.setFilms(lstFt);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 for (FilmArchief fa : DAC.FilmArchieven){
                     Archief archief = Methodes.FindArchiefById(DAC.Archieven, fa.getArchief_id());
                     Film film = Methodes.FindFilmById(DAC.Films, fa.getFilm_id());
 
-                    fa.setArchief(archief);
-                    fa.setFilm(film);
+                    try{
+                        fa.setArchief(archief);
+                        fa.setFilm(film);
 
-                    filmArchiefs = archief.getFilms();
-                    filmArchiefs.add(fa);
-                    archief.setFilms(filmArchiefs);
+                        filmArchiefs = archief.getFilms();
+                        filmArchiefs.add(fa);
+                        archief.setFilms(filmArchiefs);
 
-                    filmArchiefs = film.getArchiefs();
-                    filmArchiefs.add(fa);
-                    film.setArchiefs(filmArchiefs);
+                        filmArchiefs = film.getArchiefs();
+                        filmArchiefs.add(fa);
+                        film.setArchiefs(filmArchiefs);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 for (GebruikerArchief ga : DAC.GebruikerArchieven){
                     Gebruiker gebruiker = Methodes.FindGebruikerById(DAC.Gebruikers, ga.getGebruiker_id());
                     Archief archief = Methodes.FindArchiefById(DAC.Archieven, ga.getArchief_id());
 
-                    ga.setGebruiker(gebruiker);
-                    ga.setArchief(archief);
+                    try{
+                        ga.setGebruiker(gebruiker);
+                        ga.setArchief(archief);
 
-                    gebruikerArchiefs = gebruiker.getArchieven();
-                    gebruikerArchiefs.add(ga);
-                    gebruiker.setArchieven(gebruikerArchiefs);
+                        gebruikerArchiefs = gebruiker.getGebruikerArchieven();
+                        gebruikerArchiefs.add(ga);
+                        gebruiker.setArchieven(gebruikerArchiefs);
 
-                    gebruikerArchiefs = archief.getGebruikers();
-                    gebruikerArchiefs.add(ga);
-                    archief.setGebruikers(gebruikerArchiefs);
+                        gebruikerArchiefs = archief.getGebruikers();
+                        gebruikerArchiefs.add(ga);
+                        archief.setGebruikers(gebruikerArchiefs);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 return null;
