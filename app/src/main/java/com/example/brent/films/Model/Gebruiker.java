@@ -1,12 +1,15 @@
 package com.example.brent.films.Model;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
 import com.example.brent.films.Class.TimeStampConverter;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Gebruiker {
@@ -21,6 +24,9 @@ public class Gebruiker {
     private int postcode;
     @TypeConverters(TimeStampConverter.class)
     private Date lastLogin;
+
+    @Ignore
+    private List<GebruikerArchief> archieven;
 
     public Gebruiker(){ }
 
@@ -86,6 +92,14 @@ public class Gebruiker {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public List<GebruikerArchief> getArchieven() {
+        return (archieven == null) ? new ArrayList<GebruikerArchief>() : archieven;
+    }
+
+    public void setArchieven(List<GebruikerArchief> archieven) {
+        this.archieven = archieven;
     }
 
     @Override

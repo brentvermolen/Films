@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Films</string>
+    <integer name="gebruiker_id">1</integer>
 </resources>

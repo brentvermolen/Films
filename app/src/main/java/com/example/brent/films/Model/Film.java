@@ -70,6 +70,8 @@ public class Film {
     private List<ActeurFilm> Acteurs;
     @Ignore
     private List<FilmTags> Genres;
+    @Ignore
+    private List<FilmArchief> Archiefs;
 
     @Ignore
     private Collectie Collectie;
@@ -137,6 +139,14 @@ public class Film {
 
     public void setCollectie(com.example.brent.films.Model.Collectie collectie) {
         Collectie = collectie;
+    }
+
+    public List<FilmArchief> getArchiefs() {
+        return (Archiefs == null) ? new ArrayList<FilmArchief>() : Archiefs;
+    }
+
+    public void setArchiefs(List<FilmArchief> archiefs) {
+        Archiefs = archiefs;
     }
 
     public List<Tag> getGenres(){

@@ -8,18 +8,12 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.brent.films.Model.Aanvraag;
-import com.example.brent.films.Model.Acteur;
-import com.example.brent.films.Model.ActeurFilm;
-import com.example.brent.films.Model.Collectie;
-import com.example.brent.films.Model.Film;
-import com.example.brent.films.Model.FilmTags;
-import com.example.brent.films.Model.Gebruiker;
-import com.example.brent.films.Model.Tag;
+import com.example.brent.films.Model.*;
 
 import java.util.concurrent.Executors;
 
-@Database(entities =  {Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class, Aanvraag.class, Gebruiker.class},
+@Database(entities =  { Film.class, Tag.class, Collectie.class, ActeurFilm.class, Acteur.class, FilmTags.class,
+                        Aanvraag.class, Gebruiker.class, Archief.class, FilmArchief.class, GebruikerArchief.class },
             version = 2)
 public abstract class FilmsDb extends RoomDatabase {
     private static FilmsDb INSTANCE;
@@ -33,6 +27,9 @@ public abstract class FilmsDb extends RoomDatabase {
     public abstract FilmTagsDAO filmTagsDAO();
     public abstract AanvraagDAO aanvraagDAO();
     public abstract GebruikersDAO gebruikersDAO();
+    public abstract ArchiefDAO archiefDAO();
+    public abstract FilmArchiefDAO filmArchiefDAO();
+    public abstract GebruikerArchiefDAO gebruikerArchiefDAO();
 
     public static FilmsDb getDatabase (final Context context){
         if (INSTANCE == null) {
@@ -78,6 +75,9 @@ public abstract class FilmsDb extends RoomDatabase {
         private final ActeurFilmsDAO acteurFilmsDAO;
         private final AanvraagDAO aanvraagDAO;
         private final GebruikersDAO gebruikersDAO;
+        private final ArchiefDAO archiefDAO;
+        private final GebruikerArchiefDAO gebruikerArchiefDAO;
+        private final FilmArchiefDAO filmArchiefDAO;
 
         public EmptyAndFillDbAsync(FilmsDb instance) {
             filmsDao = instance.filmsDAO();
@@ -88,6 +88,9 @@ public abstract class FilmsDb extends RoomDatabase {
             acteurFilmsDAO = instance.acteurFilmsDAO();
             aanvraagDAO = instance.aanvraagDAO();
             gebruikersDAO = instance.gebruikersDAO();
+            archiefDAO = instance.archiefDAO();
+            gebruikerArchiefDAO = instance.gebruikerArchiefDAO();
+            filmArchiefDAO = instance.filmArchiefDAO();
         }
 
         protected Void insertData() {
@@ -99,6 +102,9 @@ public abstract class FilmsDb extends RoomDatabase {
             acteurFilmsDAO.deleteAll();
             aanvraagDAO.deleteAll();
             gebruikersDAO.deleteAll();
+            archiefDAO.deleteAll();
+            gebruikerArchiefDAO.deleteAll();
+            filmArchiefDAO.deleteAll();
 
             return null;
         }

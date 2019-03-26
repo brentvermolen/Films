@@ -14,20 +14,26 @@ import com.example.brent.films.Class.Methodes;
 import com.example.brent.films.DB.AanvraagDAO;
 import com.example.brent.films.DB.ActeurFilmsDAO;
 import com.example.brent.films.DB.ActeursDAO;
+import com.example.brent.films.DB.ArchiefDAO;
 import com.example.brent.films.DB.CollectiesDAO;
 import com.example.brent.films.DB.DbRemoteMethods;
+import com.example.brent.films.DB.FilmArchiefDAO;
 import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
+import com.example.brent.films.DB.GebruikerArchiefDAO;
 import com.example.brent.films.DB.GebruikersDAO;
 import com.example.brent.films.DB.GenresDAO;
 import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
+import com.example.brent.films.Model.Archief;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
+import com.example.brent.films.Model.FilmArchief;
 import com.example.brent.films.Model.FilmTags;
 import com.example.brent.films.Model.Gebruiker;
+import com.example.brent.films.Model.GebruikerArchief;
 import com.example.brent.films.Model.Tag;
 
 import java.io.IOException;
@@ -49,6 +55,9 @@ public class SplashScreen extends AppCompatActivity {
     FilmTagsDAO filmTagsDAO;
     AanvraagDAO aanvraagDAO;
     GebruikersDAO gebruikersDAO;
+    ArchiefDAO archiefDAO;
+    FilmArchiefDAO filmArchiefDAO;
+    GebruikerArchiefDAO gebruikerArchiefDAO;
 
 
     @Override
@@ -64,8 +73,13 @@ public class SplashScreen extends AppCompatActivity {
         filmTagsDAO = FilmsDb.getDatabase(this).filmTagsDAO();
         aanvraagDAO = FilmsDb.getDatabase(this).aanvraagDAO();
         gebruikersDAO = FilmsDb.getDatabase(this).gebruikersDAO();
+        archiefDAO = FilmsDb.getDatabase(this).archiefDAO();
+        filmArchiefDAO = FilmsDb.getDatabase(this).filmArchiefDAO();
+        gebruikerArchiefDAO = FilmsDb.getDatabase(this).gebruikerArchiefDAO();
 
         lblProgress = (TextView) findViewById(R.id.lblProgress);
+
+        final int user_id = getResources().getInteger(R.integer.gebruiker_id);
 
         new AsyncTask<Void, String, Void>(){
             @Override
@@ -79,6 +93,7 @@ public class SplashScreen extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = SplashScreen.this.getSharedPreferences("lastSynced", MODE_PRIVATE);
                 Date date = new Date(sharedPreferences.getLong("time", 1262300400000l)); //= 01/01/2010;
+                date = new Date(1262300400000l);
 
                 publishProgress("Bezig met laden van films");
 
@@ -87,7 +102,7 @@ public class SplashScreen extends AppCompatActivity {
                     try{
                         filmsDAO.insert(f);
                     }catch (Exception e){
-                        Log.e("Films", "No Insert: " + f.getNaam());
+                        e.printStackTrace();
                     }
                 }
 
@@ -106,7 +121,7 @@ public class SplashScreen extends AppCompatActivity {
                         collectiesDAO.insert(c);
                     }
                     catch (Exception e){
-                        Log.e("Collecties", "No Insert: " + c.getNaam());
+                        e.printStackTrace();
                     }
                 }
 
@@ -116,7 +131,7 @@ public class SplashScreen extends AppCompatActivity {
                     try{
                         acteursDAO.insert(a);
                     }catch (Exception e){
-                        Log.e("Acteurs", "Insert: " + a.getNaam());
+                        e.printStackTrace();
                     }
                 }
 
@@ -133,7 +148,9 @@ public class SplashScreen extends AppCompatActivity {
                 for(ActeurFilm af : lstAf) {
                     try{
                         acteurFilmsDAO.insert(af);
-                    }catch (Exception e){ }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 publishProgress("Bezig met laden van genres");
@@ -142,7 +159,7 @@ public class SplashScreen extends AppCompatActivity {
                     try{
                         genresDAO.insert(t);
                     }catch (Exception e){
-                        Log.e("Genres", "No Insert: " + t.getNaam());
+                        e.printStackTrace();
                     }
                 }
 
@@ -177,6 +194,39 @@ public class SplashScreen extends AppCompatActivity {
                     }
                 }
 
+                publishProgress("Archieven laden");
+
+                List<Archief> archieven = DbRemoteMethods.GetArchievenVanGebruiker(user_id);
+                for (Archief archief : archieven){
+                    try{
+                        archiefDAO.insert(archief);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                Object[] arr = DbRemoteMethods.GetArchievenEnGebruikerFilms(user_id, date);
+                List<FilmArchief> filmArchiefs = (List<FilmArchief>) arr[0];
+                List<GebruikerArchief> gebruikerArchiefs = (List<GebruikerArchief>) arr[1];
+
+                for(FilmArchief fa : filmArchiefs){
+                    try{
+                        filmArchiefDAO.insert(fa);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                for (GebruikerArchief ga : gebruikerArchiefs){
+                    try{
+                        gebruikerArchiefDAO.insert(ga);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                long lastSynced = System.currentTimeMillis();
+                sharedPreferences.edit().putLong("time", lastSynced).commit();
+
                 publishProgress("Lokale gegevens laden");
 
                 DAC.Films = filmsDAO.getAll();
@@ -187,6 +237,9 @@ public class SplashScreen extends AppCompatActivity {
                 DAC.FilmTags = filmTagsDAO.getAll();
                 DAC.Aanvragen = aanvraagDAO.getAll();
                 DAC.Gebruikers= gebruikersDAO.getAll();
+                DAC.Archieven = archiefDAO.getAll();
+                DAC.FilmArchieven = filmArchiefDAO.getAll();
+                DAC.GebruikerArchieven = gebruikerArchiefDAO.getAll();
 
                 for(Collectie collectie : DAC.Collecties){
                     collectie.setFilms(Methodes.GetMoviesFromCollection(DAC.Films, collectie));
@@ -231,8 +284,37 @@ public class SplashScreen extends AppCompatActivity {
                     t.setFilms(lstFt);
                 }
 
-                long lastSynced = System.currentTimeMillis();
-                sharedPreferences.edit().putLong("time", lastSynced).commit();
+                for (FilmArchief fa : DAC.FilmArchieven){
+                    Archief archief = Methodes.FindArchiefById(DAC.Archieven, fa.getArchief_id());
+                    Film film = Methodes.FindFilmById(DAC.Films, fa.getFilm_id());
+
+                    fa.setArchief(archief);
+                    fa.setFilm(film);
+
+                    filmArchiefs = archief.getFilms();
+                    filmArchiefs.add(fa);
+                    archief.setFilms(filmArchiefs);
+
+                    filmArchiefs = film.getArchiefs();
+                    filmArchiefs.add(fa);
+                    film.setArchiefs(filmArchiefs);
+                }
+
+                for (GebruikerArchief ga : DAC.GebruikerArchieven){
+                    Gebruiker gebruiker = Methodes.FindGebruikerById(DAC.Gebruikers, ga.getGebruiker_id());
+                    Archief archief = Methodes.FindArchiefById(DAC.Archieven, ga.getArchief_id());
+
+                    ga.setGebruiker(gebruiker);
+                    ga.setArchief(archief);
+
+                    gebruikerArchiefs = gebruiker.getArchieven();
+                    gebruikerArchiefs.add(ga);
+                    gebruiker.setArchieven(gebruikerArchiefs);
+
+                    gebruikerArchiefs = archief.getGebruikers();
+                    gebruikerArchiefs.add(ga);
+                    archief.setGebruikers(gebruikerArchiefs);
+                }
 
                 return null;
             }

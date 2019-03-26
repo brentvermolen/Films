@@ -14,8 +14,10 @@ import android.telephony.mbms.FileInfo;
 import android.util.Log;
 
 import com.example.brent.films.Model.Acteur;
+import com.example.brent.films.Model.Archief;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
+import com.example.brent.films.Model.Gebruiker;
 import com.example.brent.films.Model.Tag;
 
 import java.io.File;
@@ -67,6 +69,26 @@ public class Methodes {
         for (Tag a : Tags){
             if (a.getId() == ID){
                 return a;
+            }
+        }
+
+        return null;
+    }
+
+    public static Archief FindArchiefById(List<Archief> archieven, int ID){
+        for (Archief a : archieven){
+            if (a.getId() == ID){
+                return a;
+            }
+        }
+
+        return null;
+    }
+
+    public static Gebruiker FindGebruikerById(List<Gebruiker> gebruikers, int ID){
+        for (Gebruiker g : gebruikers){
+            if (g.getId() == ID){
+                return g;
             }
         }
 

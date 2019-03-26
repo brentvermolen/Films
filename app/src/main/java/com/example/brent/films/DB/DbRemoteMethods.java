@@ -5,10 +5,13 @@ import android.util.Log;
 import com.example.brent.films.Model.Aanvraag;
 import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
+import com.example.brent.films.Model.Archief;
 import com.example.brent.films.Model.Collectie;
 import com.example.brent.films.Model.Film;
+import com.example.brent.films.Model.FilmArchief;
 import com.example.brent.films.Model.FilmTags;
 import com.example.brent.films.Model.Gebruiker;
+import com.example.brent.films.Model.GebruikerArchief;
 import com.example.brent.films.Model.Tag;
 
 import java.sql.Connection;
@@ -964,8 +967,6 @@ public class DbRemoteMethods {
                 Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
                 ResultSet rs = stmt.executeQuery(query);
 
-                rs.first();
-
                 while (rs.next()){
                     SimpleDateFormat dateFormatGeboorteDatum = new SimpleDateFormat("dd/MM/yyyy");
                     SimpleDateFormat dateFormatLastLogin = new SimpleDateFormat("dd-MM-yyyy hh:ss");
@@ -996,5 +997,96 @@ public class DbRemoteMethods {
 
         Log.e("DB Conn", z);
         return gebruikers;
+    }
+
+    public static List<Archief> GetArchievenVanGebruiker(int user_id) {
+        List<Archief> archieven = new ArrayList<>();
+
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "SELECT Archiefs.* FROM Archiefs Inner Join GebruikerArchiefs on Archief_ID=Archiefs.ID Where Gebruiker_ID=" + user_id;
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    Archief archief = new Archief();
+                    archief.setId(rs.getInt(1));
+                    archief.setNaam(rs.getString(2));
+                    archieven.add(archief);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+
+        return archieven;
+    }
+
+    public static Object[] GetArchievenEnGebruikerFilms(int user_id, Date date) {
+        Connection con = null;
+        List<FilmArchief> filmArchiefs = new ArrayList<>();
+        List<GebruikerArchief> gebruikerArchiefs = new ArrayList<>();
+
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+                String query = "SELECT FilmArchiefs.*, Gebruiker_ID FROM Archiefs Inner Join [vermolens_trakt].[dbo].[FilmArchiefs] on Archiefs.ID = FilmArchiefs.Archief_ID Inner Join GebruikerArchiefs on GebruikerArchiefs.Archief_ID = FilmArchiefs.Archief_ID Inner Join Films on Film_ID=Films.ID Where Films.Toegevoegd > '" + format.format(date) + "' And GebruikerArchiefs.Gebruiker_ID=" + user_id;
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    FilmArchief fa = new FilmArchief();
+                    GebruikerArchief ga = new GebruikerArchief();
+
+                    fa.setFilm_id(rs.getInt(1));
+                    fa.setArchief_id(rs.getInt(2));
+
+                    ga.setArchief_id(rs.getInt(2));
+                    ga.setGebruiker_id(rs.getInt(3));
+
+                    filmArchiefs.add(fa);
+                    if (!gebruikerArchiefs.contains(ga)){
+                        gebruikerArchiefs.add(ga);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+        return new Object[] { filmArchiefs, gebruikerArchiefs };
     }
 }
