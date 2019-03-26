@@ -21,7 +21,7 @@
     <item
         android:id="@+id/action_genres"
         android:orderInCategory="200"
-        android:title="Genres"
+        android:title="Genres &amp; Archieven"
         android:icon="@drawable/ic_settings"
         app:showAsAction="ifRoom"></item>
 

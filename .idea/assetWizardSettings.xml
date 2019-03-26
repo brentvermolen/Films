@@ -150,8 +150,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_add" />
-                            <entry key="sourceFile" value="C:\Users\brent" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_reload" />
+                            <entry key="sourceFile" value="C:\Users\brent\Downloads\reload.svg" />
                           </map>
                         </option>
                       </PersistentState>

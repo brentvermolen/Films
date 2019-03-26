@@ -56,7 +56,6 @@
             android:background="@color/colorPrimaryDark">
 
             <LinearLayout
-                android:id="@+id/llGenres"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimaryDark"
@@ -83,23 +82,47 @@
 
         </LinearLayout>
 
-        <include
-            android:id="@+id/lst_item_favorieten"
+        <LinearLayout
+            android:id="@+id/llGenres"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/lst_genre_item"></include>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <View
+            <include
+                android:id="@+id/lst_item_favorieten"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                layout="@layout/lst_genre_item"></include>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="#20000000"></View>
+
+            <ListView
+                android:id="@+id/lstGenres"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </ListView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llArchieven"
             android:layout_width="match_parent"
-            android:layout_height="2px"
-            android:background="#20000000"></View>
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/lstGenres"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            <ListView
+                android:id="@+id/lstArchieven"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </ListView>
+            </ListView>
+
+        </LinearLayout>
 
     </LinearLayout>
 
