@@ -24,11 +24,13 @@ import android.widget.LinearLayout;
 
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.DialogSorterenOp;
+import com.example.brent.films.DB.ArchiefDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.DB.GenresDAO;
 import com.example.brent.films.Class.MoviesGridView;
 import com.example.brent.films.Class.Methodes;
+import com.example.brent.films.Model.Archief;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.Tag;
 
@@ -42,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
 
     FilmsDAO filmsDAO;
     GenresDAO genresDAO;
+    ArchiefDAO archiefDAO;
 
     ImageView imgRandHeader;
 
@@ -78,6 +81,7 @@ public class HomeActivity extends AppCompatActivity {
 
         filmsDAO = FilmsDb.getDatabase(this).filmsDAO();
         genresDAO = FilmsDb.getDatabase(this).genresDAO();
+        archiefDAO = FilmsDb.getDatabase(this).archiefDAO();
 
         sharedPrefVisibility = getSharedPreferences("Visibility", MODE_PRIVATE);
 
@@ -145,8 +149,11 @@ public class HomeActivity extends AppCompatActivity {
         llGenres.removeAllViews();
         btns.clear();
 
+        archiefDAO = FilmsDb.getDatabase(this).archiefDAO();
         genresDAO = FilmsDb.getDatabase(this).genresDAO();
+
         List<Tag> tags = genresDAO.getHiddenTags();
+        List<Archief> archiefs = archiefDAO.getOnzichtbare();
 
         DAC.Tags.sort(new Comparator<Tag>() {
             @Override
@@ -155,40 +162,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        for (final Archief archief : Methodes.FindGebruikerById(DAC.Gebruikers, getResources().getInteger(R.integer.gebruiker_id)).getArchieven()){
+            if (archiefs.contains(archief)){
+                continue;
+            }
+
+            Button btnArchief = getBtnGenre(archief.getId(), archief.getNaam(), archief.getFilms(), 1);
+
+            llGenres.addView(btnArchief);
+        }
+
         for(final Tag tag : DAC.Tags){
             if (tags.contains(tag)){
                 continue;
             }
 
-            final Button btnGenre = new Button(this, null, 0, R.style.btnTag);
-            btnGenre.setId(tag.getId());
-            btns.add(btnGenre);
-            LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            buttonLayoutParams.setMargins(7, 0, 7, 0);
-            btnGenre.setLayoutParams(buttonLayoutParams);
-            //btnGenre.setTextColor(ContextCompat.getColor(this, R.color.textcolor_btn_tag));
-            try {
-                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.textcolor_btn_tag);
-                ColorStateList colors = ColorStateList.createFromXml(getResources(), parser);
-                btnGenre.setTextColor(colors);
-            } catch (Exception e) {
-                // handle exceptions
-            }
-            btnGenre.setText(tag.getNaam());
-
-            btnGenre.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    for(Button btn : btns){
-                        btn.setEnabled(true);
-                    }
-                    btnFavorieten.setEnabled(true);
-                    btnAlleFilms.setEnabled(true);
-                    btnGenre.setEnabled(false);
-
-                    showFilms(tag.getFilms());
-                }
-            });
+            final Button btnGenre = getBtnGenre(tag.getId(), tag.getNaam(), tag.getFilms(), 0);
 
             llGenres.addView(btnGenre);
         }
@@ -200,6 +189,41 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         btnAlleFilms.performClick();
+    }
+
+    private Button getBtnGenre(int id, String naam, final List<Film> films, int type /*0=tag 1=archief */){
+        final Button btnGenre = new Button(this, null, 0, R.style.btnTag);
+        String strId = type + "" + id;
+        btnGenre.setId(Integer.parseInt(strId));
+        btns.add(btnGenre);
+        LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        buttonLayoutParams.setMargins(7, 0, 7, 0);
+        btnGenre.setLayoutParams(buttonLayoutParams);
+        //btnGenre.setTextColor(ContextCompat.getColor(this, R.color.textcolor_btn_tag));
+        try {
+            @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.textcolor_btn_tag);
+            ColorStateList colors = ColorStateList.createFromXml(getResources(), parser);
+            btnGenre.setTextColor(colors);
+        } catch (Exception e) {
+            // handle exceptions
+        }
+        btnGenre.setText(naam);
+
+        btnGenre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(Button btn : btns){
+                    btn.setEnabled(true);
+                }
+                btnFavorieten.setEnabled(true);
+                btnAlleFilms.setEnabled(true);
+                btnGenre.setEnabled(false);
+
+                showFilms(films);
+            }
+        });
+
+        return btnGenre;
     }
 
     private void handleEvents() {
@@ -215,6 +239,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void showFilms(List<Film> films){
         setTitle(films.size() + " Films");
+
+        while (films.contains(null)){
+            films.remove(null);
+        }
 
         currentlyShown = films;
 

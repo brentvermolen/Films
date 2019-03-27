@@ -38,8 +38,18 @@ public class Archief {
         this.naam = naam;
     }
 
-    public List<FilmArchief> getFilms() {
+    public List<FilmArchief> getFilmArchief() {
         return (films == null) ? new ArrayList<FilmArchief>() : films;
+    }
+
+    public List<Film> getFilms(){
+        List<Film> films = new ArrayList<>();
+
+        for (FilmArchief fa : getFilmArchief()){
+            films.add(fa.getFilm());
+        }
+
+        return films;
     }
 
     public List<GebruikerArchief> getGebruikers() {

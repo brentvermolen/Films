@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.brent.films.Class.DAC;
 import com.example.brent.films.Class.Methodes;
@@ -38,8 +37,6 @@ import com.example.brent.films.Model.Tag;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -296,7 +293,7 @@ public class SplashScreen extends AppCompatActivity {
                         fa.setArchief(archief);
                         fa.setFilm(film);
 
-                        filmArchiefs = archief.getFilms();
+                        filmArchiefs = archief.getFilmArchief();
                         filmArchiefs.add(fa);
                         archief.setFilms(filmArchiefs);
 
