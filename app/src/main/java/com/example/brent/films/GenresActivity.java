@@ -153,6 +153,9 @@ public class GenresActivity extends AppCompatActivity {
                     llGenres.setVisibility(View.VISIBLE);
                 }
                 break;
+            case 16908332:
+                onBackPressed();
+                break;
         }
 
         return true;

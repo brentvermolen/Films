@@ -238,11 +238,11 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void showFilms(List<Film> films){
-        setTitle(films.size() + " Films");
-
         while (films.contains(null)){
             films.remove(null);
         }
+
+        setTitle(films.size() + " Films");
 
         currentlyShown = films;
 

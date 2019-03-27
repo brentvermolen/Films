@@ -39,7 +39,9 @@ import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.Class.Methodes;
 import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
+import com.example.brent.films.Model.Archief;
 import com.example.brent.films.Model.Film;
+import com.example.brent.films.Model.FilmArchief;
 import com.example.brent.films.Model.Tag;
 
 import java.io.IOException;
@@ -72,6 +74,10 @@ public class FilmActivity extends AppCompatActivity {
     LinearLayout llCollectie;
     TextView lblCollectie;
     LinearLayout llCollectieInhoud;
+
+    LinearLayout llArchieven;
+    TextView lblArchief;
+    LinearLayout llArchievenInhoud;
 
     LinearLayout llTrailer;
     ImageButton btnTrailer;
@@ -191,6 +197,42 @@ public class FilmActivity extends AppCompatActivity {
                 });
 
                 llCollectieInhoud.addView(img);
+            }
+        }
+
+        llArchieven = findViewById(R.id.llArchieven);
+        lblArchief = findViewById(R.id.lblArchief);
+        llArchievenInhoud = findViewById(R.id.llArchievenInhoud);
+
+        if (film.getArchiefs().size() == 0){
+            llArchieven.setVisibility(View.GONE);
+        }else{
+            llArchieven.setVisibility(View.VISIBLE);
+
+            film.getArchiefs().sort(new Comparator<FilmArchief>() {
+                @Override
+                public int compare(FilmArchief o1, FilmArchief o2) {
+                    return o1.getArchief().getNaam().compareTo(o2.getArchief().getNaam());
+                }
+            });
+
+            llArchievenInhoud.removeAllViews();
+            for (final FilmArchief archief : film.getArchiefs()){
+                final Button btnGenre = new Button(this, null, 0, R.style.btnTagFilmDetail);
+                btnGenre.setId(archief.getArchief().getId());
+                LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                buttonLayoutParams.setMargins(7, 0, 7, 0);
+                btnGenre.setLayoutParams(buttonLayoutParams);
+                try {
+                    @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.textcolor_btn_tag_film_detail);
+                    ColorStateList colors = ColorStateList.createFromXml(getResources(), parser);
+                    btnGenre.setTextColor(colors);
+                } catch (Exception e) {
+                    // handle exceptions
+                }
+                btnGenre.setText(archief.getArchief().getNaam());
+
+                llArchievenInhoud.addView(btnGenre);
             }
         }
 
