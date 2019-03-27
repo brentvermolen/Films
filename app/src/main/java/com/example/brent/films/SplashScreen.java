@@ -297,7 +297,7 @@ public class SplashScreen extends AppCompatActivity {
                         filmArchiefs.add(fa);
                         archief.setFilms(filmArchiefs);
 
-                        filmArchiefs = film.getArchiefs();
+                        filmArchiefs = film.getFilmArchiefs();
                         filmArchiefs.add(fa);
                         film.setArchiefs(filmArchiefs);
                     }catch (Exception e){

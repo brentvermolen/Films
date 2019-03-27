@@ -141,8 +141,18 @@ public class Film {
         Collectie = collectie;
     }
 
-    public List<FilmArchief> getArchiefs() {
+    public List<FilmArchief> getFilmArchiefs() {
         return (Archiefs == null) ? new ArrayList<FilmArchief>() : Archiefs;
+    }
+
+    public List<Archief> getArchiefs(){
+        List<Archief> archiefs = new ArrayList<>();
+
+        for (FilmArchief fa : getFilmArchiefs()){
+            archiefs.add(fa.getArchief());
+        }
+
+        return archiefs;
     }
 
     public void setArchiefs(List<FilmArchief> archiefs) {

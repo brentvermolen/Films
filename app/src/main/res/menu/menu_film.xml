@@ -18,6 +18,12 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_archieven"
+        android:orderInCategory="200"
+        android:title="Archieven Wijzigen"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_verwijder"
         android:orderInCategory="200"
         android:title="Verwijder Film"

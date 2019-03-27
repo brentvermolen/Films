@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +30,9 @@ import android.widget.Toast;
 
 import com.example.brent.films.Class.ActorsFilmGridView;
 import com.example.brent.films.Class.DAC;
+import com.example.brent.films.Class.DialogEditArchieven;
 import com.example.brent.films.Class.DialogEditGenres;
+import com.example.brent.films.Class.DialogTextOutput;
 import com.example.brent.films.DB.ActeurFilmsDAO;
 import com.example.brent.films.DB.ActeursDAO;
 import com.example.brent.films.DB.DbRemoteMethods;
@@ -37,9 +40,7 @@ import com.example.brent.films.DB.FilmTagsDAO;
 import com.example.brent.films.DB.FilmsDAO;
 import com.example.brent.films.DB.FilmsDb;
 import com.example.brent.films.Class.Methodes;
-import com.example.brent.films.Model.Acteur;
 import com.example.brent.films.Model.ActeurFilm;
-import com.example.brent.films.Model.Archief;
 import com.example.brent.films.Model.Film;
 import com.example.brent.films.Model.FilmArchief;
 import com.example.brent.films.Model.Tag;
@@ -204,12 +205,12 @@ public class FilmActivity extends AppCompatActivity {
         lblArchief = findViewById(R.id.lblArchief);
         llArchievenInhoud = findViewById(R.id.llArchievenInhoud);
 
-        if (film.getArchiefs().size() == 0){
+        if (film.getFilmArchiefs().size() == 0){
             llArchieven.setVisibility(View.GONE);
         }else{
             llArchieven.setVisibility(View.VISIBLE);
 
-            film.getArchiefs().sort(new Comparator<FilmArchief>() {
+            film.getFilmArchiefs().sort(new Comparator<FilmArchief>() {
                 @Override
                 public int compare(FilmArchief o1, FilmArchief o2) {
                     return o1.getArchief().getNaam().compareTo(o2.getArchief().getNaam());
@@ -217,7 +218,7 @@ public class FilmActivity extends AppCompatActivity {
             });
 
             llArchievenInhoud.removeAllViews();
-            for (final FilmArchief archief : film.getArchiefs()){
+            for (final FilmArchief archief : film.getFilmArchiefs()){
                 final Button btnGenre = new Button(this, null, 0, R.style.btnTagFilmDetail);
                 btnGenre.setId(archief.getArchief().getId());
                 LinearLayout.LayoutParams buttonLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -383,32 +384,49 @@ public class FilmActivity extends AppCompatActivity {
                 }).show();
                 setResult(1);
                 break;
+            case R.id.action_archieven:
+                final DialogEditArchieven dialogEditArchieven = new DialogEditArchieven(this, film);
+                dialogEditArchieven.setNegativeButton("Sluiten", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setGenres();
+                    }
+                }).show();
+                setResult(1);
+                break;
             case R.id.action_verwijder:
                 //TODO: Verwijderen van een film + verwijderen van acteurs met 0 films + archieven
                 try{
                     new AsyncTask<Void, Void, Void>(){
                         @Override
                         protected Void doInBackground(Void... voids) {
-                            dao.deleteById(film.getId());
-                            DAC.Films.remove(film);
-                            DbRemoteMethods.DeleteFilm(film);
+                            new DialogTextOutput(FilmActivity.this, "Verwijderen", "Bent u zeker dat u deze film wil verwijderen?")
+                                    .setPositiveButton("Ja", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dao.deleteById(film.getId());
+                                            DAC.Films.remove(film);
+                                            DbRemoteMethods.DeleteFilm(film);
 
-                            Methodes.delete342Poster(film.getId());
+                                            Methodes.delete342Poster(film.getId());
 
-                            List<Integer> ids = DbRemoteMethods.CheckActorsWithoutFilms();
-                            ActeursDAO aDao = FilmsDb.getDatabase(FilmActivity.this).acteursDAO();
+                                            List<Integer> ids = DbRemoteMethods.CheckActorsWithoutFilms();
+                                            ActeursDAO aDao = FilmsDb.getDatabase(FilmActivity.this).acteursDAO();
 
-                            for (int id : ids){
-                                aDao.deleteById(id);
-                                Methodes.delete92Poster(id);
-                            }
+                                            for (int id : ids){
+                                                aDao.deleteById(id);
+                                                Methodes.delete92Poster(id);
+                                            }
 
-                            FilmTagsDAO ftDao = FilmsDb.getDatabase(FilmActivity.this).filmTagsDAO();
-                            ftDao.deleteByFilmId(film.getId());
-                            ActeurFilmsDAO afDao = FilmsDb.getDatabase(FilmActivity.this).acteurFilmsDAO();
-                            afDao.deleteByFilmId(film.getId());
+                                            FilmTagsDAO ftDao = FilmsDb.getDatabase(FilmActivity.this).filmTagsDAO();
+                                            ftDao.deleteByFilmId(film.getId());
+                                            ActeurFilmsDAO afDao = FilmsDb.getDatabase(FilmActivity.this).acteurFilmsDAO();
+                                            afDao.deleteByFilmId(film.getId());
 
-                            Log.e("Films", "Verwijderen success");
+                                            Log.e("Films", "Verwijderen success");
+                                        }
+                                    }).setNegativeButton("Nee", null)
+                                    .create().show();
                             return null;
                         }
                     }.execute();

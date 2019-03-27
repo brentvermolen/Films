@@ -1118,4 +1118,62 @@ public class DbRemoteMethods {
 
         Log.e("DB Conn", z);
     }
+
+    public static void InsertFilmArchief(FilmArchief filmArchief) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Insert Into FilmArchiefs Values (" + filmArchief.getFilm_id() + ", " + filmArchief.getArchief_id() + ")";
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
+
+    public static void DeleteFilmArchief(FilmArchief filmArchief) {
+        Connection con = null;
+        String z = "";
+
+        try {
+            con = connectionClass.CONN();
+
+            if (con == null) {
+                z = "Error in connection with SQL server";
+            } else {
+                String query = "Delete From FilmArchiefs Where Film_ID=" + filmArchief.getFilm_id() + " AND Archief_ID=" + filmArchief.getArchief_id();
+                Statement stmt = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                stmt.execute(query);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            z = "Exception: " + ex.toString();
+        } finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                z = "Error in closing: " + e.toString();
+            }
+        }
+
+        Log.e("DB Conn", z);
+    }
 }
